@@ -64,6 +64,9 @@
     <ClCompile Include="..\..\src\extra\jpgd.cpp">
       <Filter>extra</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\entity.cpp" />
+    <ClCompile Include="..\..\src\entitymesh.cpp" />
+    <ClCompile Include="..\..\src\world.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\camera.h" />
@@ -125,6 +128,9 @@
     <ClInclude Include="..\..\src\extra\jpgd.h">
       <Filter>extra</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\entity.h" />
+    <ClInclude Include="..\..\src\entitymesh.h" />
+    <ClInclude Include="..\..\src\world.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="extra">

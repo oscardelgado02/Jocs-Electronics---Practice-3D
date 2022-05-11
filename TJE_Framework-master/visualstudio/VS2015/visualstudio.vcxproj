@@ -128,6 +128,8 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\animation.cpp" />
     <ClCompile Include="..\..\src\camera.cpp" />
+    <ClCompile Include="..\..\src\entity.cpp" />
+    <ClCompile Include="..\..\src\entitymesh.cpp" />
     <ClCompile Include="..\..\src\extra\coldet\box.cpp" />
     <ClCompile Include="..\..\src\extra\coldet\box_bld.cpp" />
     <ClCompile Include="..\..\src\extra\coldet\coldet.cpp" />
@@ -149,10 +151,13 @@
     <ClCompile Include="..\..\src\shader.cpp" />
     <ClCompile Include="..\..\src\texture.cpp" />
     <ClCompile Include="..\..\src\utils.cpp" />
+    <ClCompile Include="..\..\src\world.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\animation.h" />
     <ClInclude Include="..\..\src\camera.h" />
+    <ClInclude Include="..\..\src\entity.h" />
+    <ClInclude Include="..\..\src\entitymesh.h" />
     <ClInclude Include="..\..\src\extra\coldet\box.h" />
     <ClInclude Include="..\..\src\extra\coldet\coldet.h" />
     <ClInclude Include="..\..\src\extra\coldet\coldetimpl.h" />
@@ -172,6 +177,7 @@
     <ClInclude Include="..\..\src\shader.h" />
     <ClInclude Include="..\..\src\texture.h" />
     <ClInclude Include="..\..\src\utils.h" />
+    <ClInclude Include="..\..\src\world.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

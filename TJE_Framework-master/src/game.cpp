@@ -6,10 +6,12 @@
 #include "shader.h"
 #include "input.h"
 #include "animation.h"
+#include "world.h"
 
 #include <cmath>
 
 //some globals
+Matrix44 model;
 Mesh* mesh = NULL;
 Texture* texture = NULL;
 Shader* shader = NULL;
@@ -19,6 +21,9 @@ float mouse_speed = 100.0f;
 FBO* fbo = NULL;
 
 Game* Game::instance = NULL;
+
+//World instance
+World* world = World::getInstance();
 
 Game::Game(int window_width, int window_height, SDL_Window* window)
 {
@@ -53,6 +58,9 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	// example of shader loading using the shaders manager
 	shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
 
+	//add entity to world
+	world->addEntityMesh(new EntityMesh("cube", model, mesh, texture, shader, Vector4(1, 1, 1, 1)));
+
 	//hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
 }
@@ -75,7 +83,7 @@ void Game::render(void)
 	glDisable(GL_CULL_FACE);
    
 	//create model matrix for cube
-	Matrix44 m;
+	/*Matrix44 m;
 	m.rotate(angle*DEG2RAD, Vector3(0, 1, 0));
 
 	if(shader)
@@ -96,6 +104,10 @@ void Game::render(void)
 		//disable shader
 		shader->disable();
 	}
+	*/
+
+	//render entities
+	world->renderEntities();
 
 	//Draw the floor grid
 	drawGrid();
