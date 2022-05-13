@@ -3,6 +3,7 @@
 #include "utils.h"
 #include "entity.h"
 #include "entitymesh.h"
+#include "playerentity.h"
 
 class World
 {
@@ -19,9 +20,12 @@ public:
 
 	//methods
 	Entity* getEntity(int idx);
-	void addEntity(Entity* e);
-	void addEntityMesh(EntityMesh* e);
+	void addEntity(std::string name, Matrix44 model);
+	void deleteEntity(int idx);
+	void addEntityMesh(std::string name, Matrix44 model, Mesh* mesh, Texture* texture, Shader* shader, Vector4 color);
+	void addPlayerEntity(std::string name, Matrix44 model, Mesh* mesh, Texture* texture, Shader* shader, Vector4 color);
 	void renderEntities();
-
+	void updateEntities(float dt);
+	void deleteAllEntities();
 };
 

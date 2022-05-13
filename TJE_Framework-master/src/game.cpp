@@ -11,7 +11,6 @@
 #include <cmath>
 
 //some globals
-Matrix44 model;
 Mesh* mesh = NULL;
 Texture* texture = NULL;
 Shader* shader = NULL;
@@ -23,7 +22,7 @@ FBO* fbo = NULL;
 Game* Game::instance = NULL;
 
 //World instance
-World* world = World::getInstance();
+World* world;
 
 Game::Game(int window_width, int window_height, SDL_Window* window)
 {
@@ -58,8 +57,13 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	// example of shader loading using the shaders manager
 	shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
 
+	//create world
+	world = World::getInstance();
+
 	//add entity to world
-	world->addEntityMesh(new EntityMesh("cube", model, mesh, texture, shader, Vector4(1, 1, 1, 1)));
+	Matrix44 model;
+	//world->addEntityMesh("cube", model, mesh, texture, shader, Vector4(1, 1, 1, 1));
+	world->addPlayerEntity("player", model, mesh, texture, shader, Vector4(1, 1, 1, 1));
 
 	//hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
@@ -83,8 +87,11 @@ void Game::render(void)
 	glDisable(GL_CULL_FACE);
    
 	//create model matrix for cube
-	/*Matrix44 m;
-	m.rotate(angle*DEG2RAD, Vector3(0, 1, 0));
+	/*
+	Matrix44 m;
+	m.rotate(angle * DEG2RAD, Vector3(0, 1, 0));
+
+	
 
 	if(shader)
 	{
@@ -143,6 +150,8 @@ void Game::update(double seconds_elapsed)
 	//to navigate with the mouse fixed in the middle
 	if (mouse_locked)
 		Input::centerMouse();
+
+	world->updateEntities(seconds_elapsed);
 }
 
 //Keyboard event handler (sync input)
@@ -151,7 +160,8 @@ void Game::onKeyDown( SDL_KeyboardEvent event )
 	switch(event.keysym.sym)
 	{
 		case SDLK_ESCAPE: must_exit = true; break; //ESC key, kill the app
-		case SDLK_F1: Shader::ReloadAll(); break; 
+		case SDLK_F1: Shader::ReloadAll(); break;
+		case SDLK_SPACE: world->deleteAllEntities(); break; //delete all entities
 	}
 }
 

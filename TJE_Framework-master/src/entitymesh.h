@@ -3,6 +3,9 @@
 #include "entity.h"
 #include "mesh.h"
 #include "texture.h"
+#include "camera.h"
+#include "shader.h"
+#include "input.h"
 
 class EntityMesh : public Entity
 {
@@ -15,6 +18,8 @@ public:
 
     //constructor
     EntityMesh(std::string name, Matrix44 model, Mesh* mesh, Texture* texture, Shader* shader, Vector4 color);
+    //destructor
+    ~EntityMesh();
 
     //methods overwritten 
     void render();

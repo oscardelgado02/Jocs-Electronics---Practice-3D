@@ -1,12 +1,18 @@
 #include "entitymesh.h"
-#include "camera.h"
-#include "game.h"
+
 
 EntityMesh::EntityMesh(std::string name, Matrix44 model, Mesh* mesh, Texture* texture, Shader* shader, Vector4 color) : Entity(name, model) {
 	this->mesh = mesh;
 	this->texture = texture;
 	this->shader = shader;
 	this->color = color;
+}
+
+EntityMesh::~EntityMesh() {
+	/*delete mesh;
+	delete texture;
+	delete shader;
+	*/
 }
 
 void EntityMesh::render()
@@ -33,4 +39,8 @@ void EntityMesh::render()
 		//disable shader
 		shader->disable();
 	}
+}
+
+void EntityMesh::update(float dt) {
+	
 }
