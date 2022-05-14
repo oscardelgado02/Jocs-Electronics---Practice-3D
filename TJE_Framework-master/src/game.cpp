@@ -21,6 +21,13 @@ FBO* fbo = NULL;
 
 Game* Game::instance = NULL;
 
+const int samurai_width = 200;
+const int samurai_height = 200;
+float padding = 20.0f;
+
+float lodDistance = 200.0f;
+float no_render_dist = 1000.0f;
+
 //World instance
 World* world;
 
@@ -52,7 +59,8 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
  	texture->load("data/texture.tga");
 
 	// example of loading Mesh from Mesh Manager
-	mesh = Mesh::Get("data/box.ASE");
+	//mesh = Mesh::Get("data/box.ASE");
+	mesh = Mesh::Get("data/Character_Samurai_Warrior_White_3.obj");
 
 	// example of shader loading using the shaders manager
 	shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
@@ -68,6 +76,53 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	//hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
 }
+
+void renderSamurais() {
+
+	//enable shader
+	shader->enable();
+
+	Camera* cam = Game::instance->camera;
+	//upload uniforms
+	shader->setUniform("u_color", Vector4(1, 1, 1, 1));
+	shader->setUniform("u_viewprojection", cam->viewprojection_matrix);
+	shader->setUniform("u_texture", texture, 0);
+	shader->setUniform("u_time", time);
+
+	for (size_t i = 0; i < samurai_width; i++) {
+		for (size_t j = 0; j < samurai_height; j++) {
+			Matrix44 model;
+			model.translate(i * padding, 0.0f, j * padding);
+
+			Vector3 samuraiPos = model.getTranslation();
+
+			Vector3 camPos = cam->eye;
+			float dist = samuraiPos.distance(camPos);
+
+			if (dist > no_render_dist) {
+				continue;
+			}
+
+			Mesh* mesh = Mesh::Get("data/Character_Samurai_Warrior_White_3.obj");
+
+			if (dist < lodDistance){
+				//set la calidad a mas pocha de los modelos
+			}
+
+			BoundingBox worldAABB = transformBoundingBox(model, mesh->box);
+			if (!cam->testBoxInFrustum(worldAABB.center, worldAABB.halfsize)) {
+				continue;
+			}
+
+			shader->setUniform("u_model", model);
+			mesh->render(GL_TRIANGLES);
+		}
+	}
+
+	//disable shader
+	shader->disable();
+}
+
 
 //what to do when the image has to be draw
 void Game::render(void)
@@ -115,6 +170,10 @@ void Game::render(void)
 
 	//render entities
 	world->renderEntities();
+
+	///////////PREUBAS//////////
+	renderSamurais();
+	////////////////////////////
 
 	//Draw the floor grid
 	drawGrid();
