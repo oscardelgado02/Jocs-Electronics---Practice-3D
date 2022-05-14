@@ -3,7 +3,6 @@
 #include "entity.h"
 #include "mesh.h"
 #include "texture.h"
-#include "camera.h"
 #include "shader.h"
 #include "input.h"
 
@@ -24,4 +23,5 @@ public:
     //methods overwritten 
     void render();
     void update(float dt);
+    bool checkFrustum();
 };

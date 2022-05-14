@@ -25,11 +25,24 @@ const int samurai_width = 200;
 const int samurai_height = 200;
 float padding = 20.0f;
 
+//Frustum variables
 float lodDistance = 200.0f;
 float no_render_dist = 1000.0f;
 
 //World instance
 World* world;
+
+//method to init entities
+void initEntities() {
+	for (size_t i = 0; i < samurai_width; i++) {
+		for (size_t j = 0; j < samurai_height; j++) {
+			Matrix44 model;
+			model.translate(i * padding, 0.0f, j * padding);
+
+			world->addEntityMesh("samurai", model, mesh, texture, shader, Vector4(1, 1, 1, 1));
+		}
+	}
+}
 
 Game::Game(int window_width, int window_height, SDL_Window* window)
 {
@@ -57,6 +70,7 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	//load one texture without using the Texture Manager (Texture::Get would use the manager)
 	texture = new Texture();
  	texture->load("data/texture.tga");
+	//texture->load("data/Character_Samurai_Warrior_White_3.mtl");
 
 	// example of loading Mesh from Mesh Manager
 	//mesh = Mesh::Get("data/box.ASE");
@@ -68,10 +82,11 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	//create world
 	world = World::getInstance();
 
-	//add entity to world
-	Matrix44 model;
+	//add entities to world
+	//Matrix44 model;
 	//world->addEntityMesh("cube", model, mesh, texture, shader, Vector4(1, 1, 1, 1));
-	world->addPlayerEntity("player", model, mesh, texture, shader, Vector4(1, 1, 1, 1));
+	//world->addPlayerEntity("player", model, mesh, texture, shader, Vector4(1, 1, 1, 1));
+	initEntities();
 
 	//hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
@@ -103,7 +118,7 @@ void renderSamurais() {
 				continue;
 			}
 
-			Mesh* mesh = Mesh::Get("data/Character_Samurai_Warrior_White_3.obj");
+			//Mesh* mesh = Mesh::Get("data/Character_Samurai_Warrior_White_3.obj");
 
 			if (dist < lodDistance){
 				//set la calidad a mas pocha de los modelos
@@ -172,7 +187,7 @@ void Game::render(void)
 	world->renderEntities();
 
 	///////////PREUBAS//////////
-	renderSamurais();
+	//renderSamurais();
 	////////////////////////////
 
 	//Draw the floor grid
@@ -210,6 +225,7 @@ void Game::update(double seconds_elapsed)
 	if (mouse_locked)
 		Input::centerMouse();
 
+	//update entities
 	world->updateEntities(seconds_elapsed);
 }
 

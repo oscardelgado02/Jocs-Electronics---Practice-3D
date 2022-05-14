@@ -2,6 +2,7 @@
 
 #include "includes.h"
 #include "framework.h"
+#include "camera.h"
 
 class Entity
 {
@@ -20,5 +21,6 @@ public:
     //some useful methods...
     Vector3 getPosition();
     void setModel(Matrix44 model);
+    float distanceToCam();
 };
 

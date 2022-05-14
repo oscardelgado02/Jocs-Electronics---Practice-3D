@@ -12,3 +12,14 @@ Vector3 Entity::getPosition() {
 void Entity::setModel(Matrix44 model) {
 	this->model = model;
 }
+
+float Entity::distanceToCam() {
+
+	//needed variables
+	Camera* cam = Camera::current;
+
+	Vector3 modelPos = model.getTranslation();
+	Vector3 camPos = cam->eye;
+
+	return modelPos.distance(camPos);
+}

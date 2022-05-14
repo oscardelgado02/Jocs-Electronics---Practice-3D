@@ -21,7 +21,7 @@ void EntityMesh::render()
 	Camera* camera = Camera::current;
 	Matrix44 model = this->model;
 
-	if (shader)
+	if (shader && checkFrustum())
 	{
 		//enable shader
 		shader->enable();
@@ -43,4 +43,29 @@ void EntityMesh::render()
 
 void EntityMesh::update(float dt) {
 	
+}
+
+bool EntityMesh::checkFrustum() {
+	//Frustum variables
+	float loadDistance = 200.0f;
+	float no_render_dist = 1000.0f;
+
+	//current camera
+	Camera* cam = Camera::current;
+
+	float dist = distanceToCam();
+	if (dist > no_render_dist) {
+		return false;
+	}
+
+	if (dist < loadDistance) {
+		//set la calidad a mas pocha de los modelos
+	}
+
+	BoundingBox worldAABB = transformBoundingBox(model, mesh->box);
+	if (!cam->testBoxInFrustum(worldAABB.center, worldAABB.halfsize)) {
+		return false;
+	}
+
+	return true;
 }
