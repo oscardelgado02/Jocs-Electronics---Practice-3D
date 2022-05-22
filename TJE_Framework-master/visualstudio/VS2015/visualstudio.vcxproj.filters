@@ -68,6 +68,9 @@
     <ClCompile Include="..\..\src\entitymesh.cpp" />
     <ClCompile Include="..\..\src\world.cpp" />
     <ClCompile Include="..\..\src\playerentity.cpp" />
+    <ClCompile Include="..\..\src\map.cpp" />
+    <ClCompile Include="..\..\src\enemyentity.cpp" />
+    <ClCompile Include="..\..\src\wallentity.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\camera.h" />
@@ -133,6 +136,9 @@
     <ClInclude Include="..\..\src\entitymesh.h" />
     <ClInclude Include="..\..\src\world.h" />
     <ClInclude Include="..\..\src\playerentity.h" />
+    <ClInclude Include="..\..\src\map.h" />
+    <ClInclude Include="..\..\src\enemyentity.h" />
+    <ClInclude Include="..\..\src\wallentity.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="extra">

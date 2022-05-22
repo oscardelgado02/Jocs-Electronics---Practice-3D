@@ -7,6 +7,7 @@
 #include "input.h"
 #include "animation.h"
 #include "world.h"
+#include "map.h"
 
 #include <cmath>
 
@@ -32,7 +33,11 @@ float no_render_dist = 1000.0f;
 //World instance
 World* world;
 
+//Map variable
+Map map = Map();
+
 //method to init entities
+/*
 void initEntities() {
 	for (size_t i = 0; i < samurai_width; i++) {
 		for (size_t j = 0; j < samurai_height; j++) {
@@ -43,6 +48,7 @@ void initEntities() {
 		}
 	}
 }
+*/
 
 Game::Game(int window_width, int window_height, SDL_Window* window)
 {
@@ -82,17 +88,20 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	//create world
 	world = World::getInstance();
 
+	//init map
+	map.loadMap("data/level/level1.txt");
+
 	//add entities to world
 	//Matrix44 model;
 	//world->addEntityMesh("cube", model, mesh, texture, shader, Vector4(1, 1, 1, 1));
 	//world->addPlayerEntity("player", model, mesh, texture, shader, Vector4(1, 1, 1, 1));
-	initEntities();
+	//initEntities();
 
 	//hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
 }
 
-void renderSamurais() {
+/*void renderSamurais() {
 
 	//enable shader
 	shader->enable();
@@ -137,6 +146,7 @@ void renderSamurais() {
 	//disable shader
 	shader->disable();
 }
+*/
 
 
 //what to do when the image has to be draw

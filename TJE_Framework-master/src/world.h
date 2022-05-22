@@ -4,6 +4,8 @@
 #include "entity.h"
 #include "entitymesh.h"
 #include "playerentity.h"
+#include "enemyentity.h"
+#include "wallentity.h"
 
 class World
 {
@@ -24,6 +26,8 @@ public:
 	void deleteEntity(int idx);
 	void addEntityMesh(std::string name, Matrix44 model, Mesh* mesh, Texture* texture, Shader* shader, Vector4 color);
 	void addPlayerEntity(std::string name, Matrix44 model, Mesh* mesh, Texture* texture, Shader* shader, Vector4 color);
+	void addEnemyEntity(std::string name, Matrix44 model, Mesh* mesh, Texture* texture, Shader* shader, Vector4 color);
+	void addWallEntity(std::string name, Matrix44 model, Mesh* mesh, Texture* texture, Shader* shader, Vector4 color);
 	void renderEntities();
 	void updateEntities(float dt);
 	void deleteAllEntities();

@@ -32,6 +32,14 @@ void World::addPlayerEntity(std::string name, Matrix44 model, Mesh* mesh, Textur
 	entities.push_back(new PlayerEntity(name, model, mesh, texture, shader, color));
 }
 
+void World::addEnemyEntity(std::string name, Matrix44 model, Mesh* mesh, Texture* texture, Shader* shader, Vector4 color) {
+	entities.push_back(new EnemyEntity(name, model, mesh, texture, shader, color));
+}
+
+void World::addWallEntity(std::string name, Matrix44 model, Mesh* mesh, Texture* texture, Shader* shader, Vector4 color) {
+	entities.push_back(new WallEntity(name, model, mesh, texture, shader, color));
+}
+
 void World::renderEntities() {
 	for (int i = 0; i < entities.size(); i++) {
 		entities[i]->render();
