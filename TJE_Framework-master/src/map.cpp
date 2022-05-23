@@ -10,6 +10,9 @@ void Map::loadEntity(int type, Mesh* mesh, Texture* texture, Vector3 position, V
 	Matrix44 model;
 	model.translate(position.x, position.y, position.z);
 	//APPLY ROTATION
+	model.rotate(rotation[2], Vector3(1, 0, 0)); //rotate in x
+	model.rotate(rotation[0], Vector3(0, 1, 0)); //rotate in y
+	model.rotate(rotation[1], Vector3(0, 0, 1)); //rotate in z
 
 	Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
 
@@ -37,7 +40,7 @@ void Map::loadMap(char* path) {
 		//Position
 		std::vector<std::string> position_str = split(line[POSITION], ',');
 		Vector3 position = Vector3(stof(position_str[0]), stof(position_str[1]), stof(position_str[2]));
-		position = position * 10; //adapt coordinates
+		position = position * 10; //adapt scale
 
 		//Rotation
 		std::vector<std::string> rotation_str = split(line[ROTATION], ',');
@@ -46,5 +49,3 @@ void Map::loadMap(char* path) {
 		loadEntity(type, mesh, text, position, rotation);
 	}
 }
-
-//values.push_back(stoi(line[j]));

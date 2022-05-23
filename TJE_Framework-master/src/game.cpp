@@ -89,6 +89,7 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	world = World::getInstance();
 
 	//init map
+	//map.loadMap("data/level/level1.txt");
 	map.loadMap("data/level/level1PROVISIONAL.txt");
 
 	//add entities to world
