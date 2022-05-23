@@ -54,4 +54,4 @@
 2 data/SM_Env_CropRow_03_66.obj data/texture_samurai.tga -0.700,0.000,0.700 90.000,0.000,0.000 0.100,0.100,0.100  0
 2 data/SM_Env_CropRow_03_66.obj data/texture_samurai.tga -1.200,0.000,0.700 90.000,0.000,0.000 0.100,0.100,0.100  0
 2 data/SM_Env_CropRow_03_66.obj data/texture_samurai.tga -1.200,0.000,1.050 90.000,0.000,0.000 0.100,0.100,0.100  0
-0 data/Character_Ninja_Black_14.obj data/texture_samurai.tga 0.000,0.000,2.200 0.000,0.000,0.000 0.100,0.100,0.100  0
+0 data/Character_Ninja_Black_14.obj data/texture_samurai.tga 0.000,0.000,2.200 180.000,0.000,0.000 0.100,0.100,0.100  0
