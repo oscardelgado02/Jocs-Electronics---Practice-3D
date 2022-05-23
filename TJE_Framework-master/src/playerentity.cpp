@@ -9,7 +9,7 @@ void PlayerEntity::render() {
 }
 
 void PlayerEntity::update(float dt) {
-	float speed = dt * 100.0f; //the speed is defined by the seconds_elapsed so it goes constant
+	float speed = dt * 20.0f; //the speed is defined by the seconds_elapsed so it goes constant
 
 
 	//mouse input to rotate the cam
@@ -20,8 +20,16 @@ void PlayerEntity::update(float dt) {
 
 	//async input to move the camera around
 	if (Input::isKeyPressed(SDL_SCANCODE_LSHIFT)) speed *= 10; //move faster with left shift
-	if (Input::isKeyPressed(SDL_SCANCODE_W) || Input::isKeyPressed(SDL_SCANCODE_UP)) model.translate(0.0f, 0.0f, -1.0f * speed);
-	if (Input::isKeyPressed(SDL_SCANCODE_S) || Input::isKeyPressed(SDL_SCANCODE_DOWN)) model.translate(0.0f, 0.0f, 1.0f * speed);
-	if (Input::isKeyPressed(SDL_SCANCODE_A) || Input::isKeyPressed(SDL_SCANCODE_LEFT)) model.translate(-1.0f * speed, 0.0f, 0.0f);
-	if (Input::isKeyPressed(SDL_SCANCODE_D) || Input::isKeyPressed(SDL_SCANCODE_RIGHT)) model.translate(1.0f * speed, 0.0f, 0.0f);
+	if (Input::isKeyPressed(SDL_SCANCODE_W) || Input::isKeyPressed(SDL_SCANCODE_UP)) {
+		model.translate(0.0f, 0.0f, -1.0f * speed);
+	}
+	if (Input::isKeyPressed(SDL_SCANCODE_S) || Input::isKeyPressed(SDL_SCANCODE_DOWN)) {
+		model.translate(0.0f, 0.0f, 1.0f * speed);
+	}
+	if (Input::isKeyPressed(SDL_SCANCODE_A) || Input::isKeyPressed(SDL_SCANCODE_LEFT)) {
+		model.translate(-1.0f * speed, 0.0f, 0.0f);
+	}
+	if (Input::isKeyPressed(SDL_SCANCODE_D) || Input::isKeyPressed(SDL_SCANCODE_RIGHT)) {
+		model.translate(1.0f * speed, 0.0f, 0.0f);
+	}
 }

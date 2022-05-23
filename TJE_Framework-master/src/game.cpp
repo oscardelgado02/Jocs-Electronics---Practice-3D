@@ -17,14 +17,16 @@ Texture* texture = NULL;
 Shader* shader = NULL;
 Animation* anim = NULL;
 float angle = 0;
-float mouse_speed = 100.0f;
+float mouse_speed = 20.0f;
 FBO* fbo = NULL;
 
 Game* Game::instance = NULL;
 
-const int samurai_width = 200;
-const int samurai_height = 200;
-float padding = 20.0f;
+Mesh* grassmesh = NULL;
+Texture* grasstexture = NULL;
+const int grass_width = 50;
+const int grass_height = 50;
+float padding = 2.5f;
 
 //Frustum variables
 float lodDistance = 200.0f;
@@ -39,8 +41,8 @@ Map map = Map();
 //method to init entities
 /*
 void initEntities() {
-	for (size_t i = 0; i < samurai_width; i++) {
-		for (size_t j = 0; j < samurai_height; j++) {
+	for (size_t i = 0; i < grass_width; i++) {
+		for (size_t j = 0; j < grass_height; j++) {
 			Matrix44 model;
 			model.translate(i * padding, 0.0f, j * padding);
 
@@ -49,6 +51,17 @@ void initEntities() {
 	}
 }
 */
+
+void initGrass() { //para poner un suelo de césped
+	for (size_t i = 0; i < grass_width; i++) {
+		for (size_t j = 0; j < grass_height; j++) {
+			Matrix44 model;
+			model.translate((i * padding) - grass_width, 0.0f, (j * padding) - grass_height);
+
+			world->addEntityMesh("grass", model, grassmesh, grasstexture, shader, Vector4(1, 1, 1, 1));
+		}
+	}
+}
 
 Game::Game(int window_width, int window_height, SDL_Window* window)
 {
@@ -70,17 +83,21 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 
 	//create our camera
 	camera = new Camera();
-	camera->lookAt(Vector3(0.f,100.f, 100.f),Vector3(0.f,0.f,0.f), Vector3(0.f,1.f,0.f)); //position the camera and point to 0,0,0
+	camera->lookAt(Vector3(0.f, 4.f, 30.0f),Vector3(0.f,4.f,0.f), Vector3(0.f,1.f,0.f)); //position the camera and point to 0,0,0
 	camera->setPerspective(70.f,window_width/(float)window_height,0.1f,10000.f); //set the projection, we want to be perspective
 
 	//load one texture without using the Texture Manager (Texture::Get would use the manager)
 	texture = new Texture();
  	texture->load("data/texture.tga");
+
+	grasstexture = new Texture();
+	grasstexture->load("data/texture_samurai.tga");
 	//texture->load("data/Character_Samurai_Warrior_White_3.mtl");
 
 	// example of loading Mesh from Mesh Manager
 	//mesh = Mesh::Get("data/box.ASE");
 	mesh = Mesh::Get("data/Character_Samurai_Warrior_White_3.obj");
+	grassmesh = Mesh::Get("data/SM_Env_Tile_Grass_01_25.obj");
 
 	// example of shader loading using the shaders manager
 	shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
@@ -97,6 +114,8 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	//world->addEntityMesh("cube", model, mesh, texture, shader, Vector4(1, 1, 1, 1));
 	//world->addPlayerEntity("player", model, mesh, texture, shader, Vector4(1, 1, 1, 1));
 	//initEntities();
+
+	initGrass();
 
 	//hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse

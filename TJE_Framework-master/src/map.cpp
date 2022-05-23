@@ -10,9 +10,9 @@ void Map::loadEntity(int type, Mesh* mesh, Texture* texture, Vector3 position, V
 	Matrix44 model;
 	model.translate(position.x, position.y, position.z);
 	//APPLY ROTATION
-	model.rotate(rotation[2], Vector3(1, 0, 0)); //rotate in x
-	model.rotate(rotation[0], Vector3(0, 1, 0)); //rotate in y
-	model.rotate(rotation[1], Vector3(0, 0, 1)); //rotate in z
+	model.rotate((PI / 180) * rotation.x, Vector3(0, 1, 0)); //rotate in x
+	model.rotate((PI / 180) * rotation.y, Vector3(0, 1, 0)); //rotate in y
+	model.rotate((PI / 180) * rotation.z, Vector3(0, 0, 1)); //rotate in z
 
 	Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
 
