@@ -34,20 +34,6 @@ World* world;
 //Map variable
 Map map = Map();
 
-//method to init entities
-/*
-void initEntities() {
-	for (size_t i = 0; i < grass_width; i++) {
-		for (size_t j = 0; j < grass_height; j++) {
-			Matrix44 model;
-			model.translate(i * padding, 0.0f, j * padding);
-
-			world->addEntityMesh("samurai", model, mesh, texture, shader, Vector4(1, 1, 1, 1));
-		}
-	}
-}
-*/
-
 void initGrass() { //para poner un suelo de césped
 	for (size_t i = 0; i < grass_width; i++) {
 		for (size_t j = 0; j < grass_height; j++) {
@@ -82,17 +68,9 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	camera->lookAt(Vector3(0.f, 2.2f, 24.0f),Vector3(0.f,2.2f,0.f), Vector3(0.f,1.f,0.f)); //position the camera and point to 0,0,0
 	camera->setPerspective(70.f,window_width/(float)window_height,0.1f,10000.f); //set the projection, we want to be perspective
 
-	//load one texture without using the Texture Manager (Texture::Get would use the manager)
-	texture = new Texture();
- 	texture->load("data/texture.tga");
-
+	//grass mesh and texture init
 	grasstexture = new Texture();
 	grasstexture->load("data/texture_samurai.tga");
-	//texture->load("data/Character_Samurai_Warrior_White_3.mtl");
-
-	// example of loading Mesh from Mesh Manager
-	//mesh = Mesh::Get("data/box.ASE");
-	mesh = Mesh::Get("data/Character_Samurai_Warrior_White_3.obj");
 	grassmesh = Mesh::Get("data/SM_Env_Tile_Grass_01_25.obj");
 
 	// example of shader loading using the shaders manager
@@ -104,66 +82,11 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	//init map
 	//map.loadMap("data/level/level1.txt");
 	map.loadMap("data/level/level1PROVISIONAL.txt");
-
-	//add entities to world
-	//Matrix44 model;
-	//world->addEntityMesh("cube", model, mesh, texture, shader, Vector4(1, 1, 1, 1));
-	//world->addPlayerEntity("player", model, mesh, texture, shader, Vector4(1, 1, 1, 1));
-	//initEntities();
-
 	initGrass();
 
 	//hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
 }
-
-/*void renderSamurais() {
-
-	//enable shader
-	shader->enable();
-
-	Camera* cam = Game::instance->camera;
-	//upload uniforms
-	shader->setUniform("u_color", Vector4(1, 1, 1, 1));
-	shader->setUniform("u_viewprojection", cam->viewprojection_matrix);
-	shader->setUniform("u_texture", texture, 0);
-	shader->setUniform("u_time", time);
-
-	for (size_t i = 0; i < samurai_width; i++) {
-		for (size_t j = 0; j < samurai_height; j++) {
-			Matrix44 model;
-			model.translate(i * padding, 0.0f, j * padding);
-
-			Vector3 samuraiPos = model.getTranslation();
-
-			Vector3 camPos = cam->eye;
-			float dist = samuraiPos.distance(camPos);
-
-			if (dist > no_render_dist) {
-				continue;
-			}
-
-			//Mesh* mesh = Mesh::Get("data/Character_Samurai_Warrior_White_3.obj");
-
-			if (dist < lodDistance){
-				//set la calidad a mas pocha de los modelos
-			}
-
-			BoundingBox worldAABB = transformBoundingBox(model, mesh->box);
-			if (!cam->testBoxInFrustum(worldAABB.center, worldAABB.halfsize)) {
-				continue;
-			}
-
-			shader->setUniform("u_model", model);
-			mesh->render(GL_TRIANGLES);
-		}
-	}
-
-	//disable shader
-	shader->disable();
-}
-*/
-
 
 //what to do when the image has to be draw
 void Game::render(void)
@@ -181,40 +104,9 @@ void Game::render(void)
 	glDisable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
-   
-	//create model matrix for cube
-	/*
-	Matrix44 m;
-	m.rotate(angle * DEG2RAD, Vector3(0, 1, 0));
-
-	
-
-	if(shader)
-	{
-		//enable shader
-		shader->enable();
-
-		//upload uniforms
-		shader->setUniform("u_color", Vector4(1,1,1,1));
-		shader->setUniform("u_viewprojection", camera->viewprojection_matrix );
-		shader->setUniform("u_texture", texture, 0);
-		shader->setUniform("u_model", m);
-		shader->setUniform("u_time", time);
-
-		//do the draw call
-		mesh->render( GL_TRIANGLES );
-
-		//disable shader
-		shader->disable();
-	}
-	*/
 
 	//render entities
 	world->renderEntities();
-
-	///////////PREUBAS//////////
-	//renderSamurais();
-	////////////////////////////
 
 	//Draw the floor grid
 	drawGrid();
@@ -229,9 +121,6 @@ void Game::render(void)
 void Game::update(double seconds_elapsed)
 {
 	float speed = seconds_elapsed * mouse_speed; //the speed is defined by the seconds_elapsed so it goes constant
-
-	//example
-	angle += (float)seconds_elapsed * 10.0f;
 
 	//mouse input to rotate the cam
 	if ((Input::mouse_state & SDL_BUTTON_LEFT) || mouse_locked ) //is left button pressed?
