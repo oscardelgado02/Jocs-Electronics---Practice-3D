@@ -28,10 +28,6 @@ const int grass_width = 50;
 const int grass_height = 50;
 float padding = 2.5f;
 
-//Frustum variables
-float lodDistance = 200.0f;
-float no_render_dist = 1000.0f;
-
 //World instance
 World* world;
 
