@@ -17,46 +17,51 @@ void PlayerEntity::update(float dt) {
 	//mouse input to rotate the cam
 	if ((Input::mouse_state & SDL_BUTTON_LEFT))
 	{
-		//cam->center = model.getTranslation() + Vector3(0.0f, 2.2f, -10.0f);
 		model.rotate(Input::mouse_delta.x * 0.005f, Vector3(0.0f, -1.0f, 0.0f));
 		cam->rotate(Input::mouse_delta.x * 0.005f, Vector3(0.0f,-1.0f,0.0f));
 		cam->rotate(Input::mouse_delta.y * 0.005f, cam->getLocalVector( Vector3(-1.0f,0.0f,0.0f)));
 	}
 
 	//async input to move the camera around
-
 	if (Input::isKeyPressed(SDL_SCANCODE_LSHIFT)) speed *= 10; //move faster with left shift
-	if (Input::isKeyPressed(SDL_SCANCODE_W) || Input::isKeyPressed(SDL_SCANCODE_UP)) {
-		
-		Vector3 oldCamEye = cam->eye;
-		cam->move(Vector3(0.0f, 0.0f, 1.0f) * speed);
-		if (cam->eye.y != 2.2f) {
-			cam->move(Vector3(0.0f, cam->eye.y - oldCamEye.y, 0.0f));
-		}
 
+	if (Input::isKeyPressed(SDL_SCANCODE_W)) {
+		moveFirstPersonCam(cam, Vector3(0.0f, 0.0f, 1.0f * speed));
 	}
-	if (Input::isKeyPressed(SDL_SCANCODE_S) || Input::isKeyPressed(SDL_SCANCODE_DOWN)) {
-		
-		Vector3 oldCamEye = cam->eye;
-		cam->move(Vector3(0.0f, 0.0f, -1.0f) * speed);
-		if (cam->eye.y != 2.2f) {
-			cam->move(Vector3(0.0f, cam->eye.y - oldCamEye.y, 0.0f));
-		}
+	if (Input::isKeyPressed(SDL_SCANCODE_S)) {
+		moveFirstPersonCam(cam, Vector3(0.0f, 0.0f, -1.0f * speed));
 	}
-	if (Input::isKeyPressed(SDL_SCANCODE_A) || Input::isKeyPressed(SDL_SCANCODE_LEFT)) {
-		
-		Vector3 oldCamEye = cam->eye;
-		cam->move(Vector3(1.0f, 0.0f, 0.0f) * speed);
-		if (cam->eye.y != 2.2f) {
-			cam->move(Vector3(0.0f, cam->eye.y - oldCamEye.y, 0.0f));
-		}
+	if (Input::isKeyPressed(SDL_SCANCODE_A)) {
+		moveFirstPersonCam(cam, Vector3(1.0f * speed, 0.0f, 0.0f));
 	}
-	if (Input::isKeyPressed(SDL_SCANCODE_D) || Input::isKeyPressed(SDL_SCANCODE_RIGHT)) {
-		Vector3 oldCamEye = cam->eye;
-		cam->move(Vector3(-1.0f, 0.0f, 0.0f) * speed);
-		if (cam->eye.y != 2.2f) {
-			cam->move(Vector3(0.0f, cam->eye.y - oldCamEye.y, 0.0f));
-		}
+	if (Input::isKeyPressed(SDL_SCANCODE_D)) {
+		moveFirstPersonCam(cam, Vector3(-1.0f * speed, 0.0f, 0.0f));
 	}
+
+	/*
+	printf("Cam: %f,%f,%f\n", cam->eye.x, cam->eye.y, cam->eye.z);
+	printf("Model: %f,%f,%f\n\n", this->model.getTranslation().x, this->model.getTranslation().y, this->model.getTranslation().z);
+	*/
+}
+
+void PlayerEntity::moveFirstPersonCam(Camera* cam, Vector3 delta) {
+
+	//cam Vector3
+	Vector3 localDelta = cam->getLocalVector(delta);
 	
+	//change eye coordinates
+	cam->eye.x = cam->eye.x - localDelta.x;
+	cam->eye.z = cam->eye.z - localDelta.z;
+
+	//change center coordinates
+	cam->center.x = cam->center.x - localDelta.x;
+	cam->center.z = cam->center.z - localDelta.z;
+
+	//world coordinates cam Vector3
+	Vector3 modelCoordinates = Vector3(-localDelta.x, 0.0f, -localDelta.z);
+
+	//change model coordinates
+	this->model.translateGlobal(modelCoordinates.x, 0.0f, modelCoordinates.z);
+
+	cam->updateViewMatrix();
 }

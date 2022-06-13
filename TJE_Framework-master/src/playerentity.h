@@ -13,5 +13,6 @@ public:
     //methods overwritten 
     void render();
     void update(float dt);
+    void moveFirstPersonCam(Camera* cam, Vector3 position);
 };
 
