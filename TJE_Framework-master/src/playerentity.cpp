@@ -1,5 +1,6 @@
 #include "playerentity.h"
 #include "game.h"
+#include "world.h"
 
 PlayerEntity::PlayerEntity(std::string name, Matrix44 model, Mesh* mesh, Texture* texture, Shader* shader, Vector4 color) : EntityMesh(name, model, mesh, texture, shader, color) {}
 
@@ -11,6 +12,7 @@ void PlayerEntity::render() {
 
 void PlayerEntity::update(float dt) {
 	float speed = dt * 10.0f; //the speed is defined by the seconds_elapsed so it goes constant
+	Vector3 playerVel = Vector3(0.0f, 0.0f, 0.0f);
 
 	Camera* cam = Game::instance->camera;
 
@@ -26,17 +28,20 @@ void PlayerEntity::update(float dt) {
 	if (Input::isKeyPressed(SDL_SCANCODE_LSHIFT)) speed *= 10; //move faster with left shift
 
 	if (Input::isKeyPressed(SDL_SCANCODE_W)) {
-		moveFirstPersonCam(cam, Vector3(0.0f, 0.0f, 1.0f * speed));
+		playerVel = Vector3(0.0f, 0.0f, 1.0f * speed);
 	}
 	if (Input::isKeyPressed(SDL_SCANCODE_S)) {
-		moveFirstPersonCam(cam, Vector3(0.0f, 0.0f, -1.0f * speed));
+		playerVel = Vector3(0.0f, 0.0f, -1.0f * speed);
 	}
 	if (Input::isKeyPressed(SDL_SCANCODE_A)) {
-		moveFirstPersonCam(cam, Vector3(1.0f * speed, 0.0f, 0.0f));
+		playerVel = Vector3(1.0f * speed, 0.0f, 0.0f);
 	}
 	if (Input::isKeyPressed(SDL_SCANCODE_D)) {
-		moveFirstPersonCam(cam, Vector3(-1.0f * speed, 0.0f, 0.0f));
+		playerVel = Vector3(-1.0f * speed, 0.0f, 0.0f);
 	}
+
+	detectPlayerCollision(cam, dt, playerVel);
+	moveFirstPersonCam(cam, playerVel);
 
 	/*
 	printf("Cam: %f,%f,%f\n", cam->eye.x, cam->eye.y, cam->eye.z);
@@ -48,7 +53,7 @@ void PlayerEntity::moveFirstPersonCam(Camera* cam, Vector3 delta) {
 
 	//cam Vector3
 	Vector3 localDelta = cam->getLocalVector(delta);
-	
+
 	//change eye coordinates
 	cam->eye.x = cam->eye.x - localDelta.x;
 	cam->eye.z = cam->eye.z - localDelta.z;
@@ -64,4 +69,50 @@ void PlayerEntity::moveFirstPersonCam(Camera* cam, Vector3 delta) {
 	this->model.translateGlobal(modelCoordinates.x, 0.0f, modelCoordinates.z);
 
 	cam->updateViewMatrix();
+}
+
+void PlayerEntity::detectPlayerCollision(Camera* cam, float dt, Vector3 playerVel) {
+	
+	/*
+	Game* g = Game::instance;
+	World* world = World::getInstance();
+	Vector3 dir = Vector3(cam->center.x, 0.0f, cam->center.z);
+	Vector3 rayOrigin = cam->eye;
+
+	for (size_t i = 0; i < world->getEntitiesSize(); i++) {
+		EntityMesh* entity = (EntityMesh*) world->getEntity(i);
+		Vector3 pos; Vector3 normal;
+
+		if (entity->mesh->testRayCollision(entity->model, rayOrigin, dir, pos, normal)) {
+			return true;
+		}
+	}
+
+	return false;
+	*/
+	World* world = World::getInstance();
+
+	Vector3 playerPos = this->model.getTranslation();
+	Vector3 nextPos = playerPos + playerVel;
+	Vector3 character_center = nextPos + Vector3(0, 0.5f, 0);
+
+	for (size_t i = 0; i < world->getEntitiesSize(); i++) {
+		EntityMesh* entity = (EntityMesh*)world->getEntity(i);
+		Vector3 coll; Vector3 normal;
+
+		if (!entity->mesh->testSphereCollision(entity->model, character_center, 0.5f, coll, normal)) {
+			continue;
+		}
+
+		Vector3 push_away = normalize(coll - character_center) * dt;
+		nextPos = playerPos - push_away;
+
+		//change eye coordinates
+		cam->eye.x = cam->eye.x - push_away.x;
+		cam->eye.z = cam->eye.z - push_away.z;
+
+		//change center coordinates
+		cam->center.x = cam->center.x - push_away.x;
+		cam->center.z = cam->center.z - push_away.z;
+	}
 }

@@ -57,3 +57,7 @@ void World::deleteAllEntities() {
 		entities[i]->~Entity();
 	}
 }
+
+int World::getEntitiesSize() {
+	return entities.size();
+}
