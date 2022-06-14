@@ -11,7 +11,7 @@ void PlayerEntity::render() {
 }
 
 void PlayerEntity::update(float dt) {
-	float speed = dt * 10.0f; //the speed is defined by the seconds_elapsed so it goes constant
+	float speed = dt * 5.0f; //the speed is defined by the seconds_elapsed so it goes constant
 	Vector3 playerVel = Vector3(0.0f, 0.0f, 0.0f);
 
 	Camera* cam = Game::instance->camera;
@@ -72,40 +72,41 @@ void PlayerEntity::moveFirstPersonCam(Camera* cam, Vector3 delta) {
 }
 
 void PlayerEntity::detectPlayerCollision(Camera* cam, float dt, Vector3 playerVel) {
-	
-	/*
-	Game* g = Game::instance;
+
 	World* world = World::getInstance();
-	Vector3 dir = Vector3(cam->center.x, 0.0f, cam->center.z);
-	Vector3 rayOrigin = cam->eye;
-
-	for (size_t i = 0; i < world->getEntitiesSize(); i++) {
-		EntityMesh* entity = (EntityMesh*) world->getEntity(i);
-		Vector3 pos; Vector3 normal;
-
-		if (entity->mesh->testRayCollision(entity->model, rayOrigin, dir, pos, normal)) {
-			return true;
-		}
-	}
-
-	return false;
-	*/
-	World* world = World::getInstance();
-
-	Vector3 playerPos = this->model.getTranslation();
+	Vector3 playerPos = model.getTranslation();
 	Vector3 nextPos = playerPos + playerVel;
-	Vector3 character_center = nextPos + Vector3(0, 0.5f, 0);
+
+	//calculamos el centro de la esfera de colisión del player elevandola hasta la cintura
+	Vector3 character_center = nextPos + Vector3(0, 0.95f, 0);
+
+	//para cada objecto de la escena...
 
 	for (size_t i = 0; i < world->getEntitiesSize(); i++) {
-		EntityMesh* entity = (EntityMesh*)world->getEntity(i);
-		Vector3 coll; Vector3 normal;
+		
+		Entity* currentEntity = world->getEntity(i);
+		EntityMesh* entityMesh = (EntityMesh*) currentEntity;
 
-		if (!entity->mesh->testSphereCollision(entity->model, character_center, 0.5f, coll, normal)) {
+		Vector3 coll;
+		Vector3 collnorm;
+
+		if (currentEntity->name.compare("player") == 0) {
 			continue;
 		}
 
-		Vector3 push_away = normalize(coll - character_center) * dt;
-		nextPos = playerPos - push_away;
+		//comprobamos si colisiona el objeto con la esfera (radio 3)
+		if ((entityMesh->mesh->testSphereCollision(entityMesh->model, character_center, 0.5f, coll, collnorm)) == false)
+			continue; //si no colisiona, pasamos al siguiente objeto
+
+			//si la esfera está colisionando muevela a su posicion anterior alejandola del objeto
+		Vector3 push_away = normalize(coll - character_center) * dt * 5.0f;
+		nextPos = playerPos - push_away; //move to previous pos but a little bit further
+
+		//cuidado con la Y, si nuestro juego es 2D la ponemos a 0
+		nextPos.y = 0;
+
+		//reflejamos el vector velocidad para que de la sensacion de que rebota en la pared
+		//velocity = reflect(velocity, collnorm) * 0.95;
 
 		//change eye coordinates
 		cam->eye.x = cam->eye.x - push_away.x;
@@ -114,5 +115,14 @@ void PlayerEntity::detectPlayerCollision(Camera* cam, float dt, Vector3 playerVe
 		//change center coordinates
 		cam->center.x = cam->center.x - push_away.x;
 		cam->center.z = cam->center.z - push_away.z;
+
+		//world coordinates cam Vector3
+		Vector3 modelCoordinates = Vector3(-push_away.x, 0.0f, -push_away.z);
+
+		//change model coordinates
+		this->model.translateGlobal(modelCoordinates.x, 0.0f, modelCoordinates.z);
+
+		cam->updateViewMatrix();
 	}
+
 }
