@@ -2,7 +2,10 @@
 #include "game.h"
 #include "world.h"
 
-PlayerEntity::PlayerEntity(std::string name, Matrix44 model, Mesh* mesh, Texture* texture, Shader* shader, Vector4 color) : EntityMesh(name, model, mesh, texture, shader, color) {}
+PlayerEntity::PlayerEntity(std::string name, Matrix44 model, Mesh* mesh, Texture* texture, Shader* shader, Vector4 color) : EntityMesh(name, model, mesh, texture, shader, color) {
+	cooldown = 3.0f;
+	cooldown_enable = true;
+}
 
 PlayerEntity::~PlayerEntity(){}
 
@@ -11,21 +14,43 @@ void PlayerEntity::render() {
 }
 
 void PlayerEntity::update(float dt) {
-	float speed = dt * 5.0f; //the speed is defined by the seconds_elapsed so it goes constant
+	float speed = dt * 2.0f; //the speed is defined by the seconds_elapsed so it goes constant
 	Vector3 playerVel = Vector3(0.0f, 0.0f, 0.0f);
 
 	Camera* cam = Game::instance->camera;
 
 	//mouse input to rotate the cam
-	if ((Input::mouse_state & SDL_BUTTON_LEFT))
+	model.rotate(Input::mouse_delta.x * 0.002f, Vector3(0.0f, -1.0f, 0.0f));
+	cam->rotate(Input::mouse_delta.x * 0.002f, Vector3(0.0f, -1.0f, 0.0f));
+	cam->rotate(Input::mouse_delta.y * 0.002f, cam->getLocalVector(Vector3(-1.0f, 0.0f, 0.0f)));
+
+	/*
+	if ((Input::mouse_state))
 	{
 		model.rotate(Input::mouse_delta.x * 0.005f, Vector3(0.0f, -1.0f, 0.0f));
 		cam->rotate(Input::mouse_delta.x * 0.005f, Vector3(0.0f,-1.0f,0.0f));
 		cam->rotate(Input::mouse_delta.y * 0.005f, cam->getLocalVector( Vector3(-1.0f,0.0f,0.0f)));
 	}
+	*/
 
 	//async input to move the camera around
-	if (Input::isKeyPressed(SDL_SCANCODE_LSHIFT)) speed *= 10; //move faster with left shift
+	if (Input::isKeyPressed(SDL_SCANCODE_LSHIFT) && cooldown_enable) {
+		speed *= 3; //move faster with left shift
+		cooldown -= dt;
+	}
+	else {
+		if (cooldown < 3.0f) {
+			cooldown += dt;
+		}
+	}
+
+	//cooldown of running
+	if (cooldown < 0.0f) {
+		cooldown_enable = false;
+	}
+	if (cooldown > 2.0f) {
+		cooldown_enable = true;
+	}
 
 	if (Input::isKeyPressed(SDL_SCANCODE_W)) {
 		playerVel = Vector3(0.0f, 0.0f, 1.0f * speed);
@@ -40,8 +65,8 @@ void PlayerEntity::update(float dt) {
 		playerVel = Vector3(-1.0f * speed, 0.0f, 0.0f);
 	}
 
-	//detectPlayerCollision(cam, dt, playerVel);
-	detectPlayerCollision2(cam, dt, playerVel, speed);
+	detectPlayerCollision(cam, dt, playerVel);
+	//detectPlayerCollision2(cam, dt, playerVel, speed);
 	moveFirstPersonCam(cam, playerVel);
 	
 	/*
@@ -79,7 +104,7 @@ void PlayerEntity::detectPlayerCollision(Camera* cam, float dt, Vector3 playerVe
 	Vector3 nextPos = playerPos + playerVel;
 
 	//calculamos el centro de la esfera de colisión del player elevandola hasta la cintura
-	Vector3 character_center = nextPos + Vector3(0, 0.95f, 0);
+	Vector3 character_center = nextPos + Vector3(0, 0.6f, 0);
 
 	//para cada objecto de la escena...
 
