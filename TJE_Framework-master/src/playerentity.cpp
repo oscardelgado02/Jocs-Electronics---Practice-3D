@@ -1,6 +1,7 @@
 #include "playerentity.h"
 #include "game.h"
 #include "world.h"
+#include "bass.h"
 
 PlayerEntity::PlayerEntity(std::string name, Matrix44 model, Mesh* mesh, Texture* texture, Shader* shader, Vector4 color) : EntityMesh(name, model, mesh, texture, shader, color) {
 	cooldown = 3.0f;
