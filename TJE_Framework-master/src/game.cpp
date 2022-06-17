@@ -8,7 +8,7 @@
 #include "animation.h"
 #include "world.h"
 #include "map.h"
-#include "bass.h"
+#include "sound.h"
 
 #include <cmath>
 
@@ -34,6 +34,9 @@ World* world;
 
 //Map variable
 Map map = Map();
+
+//Ambience sound
+Sound ambience_sound = Sound("data/sounds/ambience/mixkit-creepy-tomb-ambience-2500.wav", true);
 
 void initGrass() { //para poner un suelo de césped
 	for (size_t i = 0; i < grass_width; i++) {
@@ -88,12 +91,8 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	//hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
 
-	//enable sound
-	if (BASS_Init(-1, 44100, 0, 0, NULL) == false) //-1 significa usar el por defecto del sistema operativo
-	{
-		//error abriendo la tarjeta de sonido...
-	}
-
+	//ambience sound
+	ambience_sound.PlayGameSound();
 }
 
 //what to do when the image has to be draw

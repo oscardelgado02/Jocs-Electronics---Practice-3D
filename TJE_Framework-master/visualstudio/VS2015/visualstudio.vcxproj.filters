@@ -71,6 +71,7 @@
     <ClCompile Include="..\..\src\map.cpp" />
     <ClCompile Include="..\..\src\enemyentity.cpp" />
     <ClCompile Include="..\..\src\wallentity.cpp" />
+    <ClCompile Include="..\..\src\sound.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\camera.h" />
@@ -139,6 +140,7 @@
     <ClInclude Include="..\..\src\map.h" />
     <ClInclude Include="..\..\src\enemyentity.h" />
     <ClInclude Include="..\..\src\wallentity.h" />
+    <ClInclude Include="..\..\src\sound.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="extra">
