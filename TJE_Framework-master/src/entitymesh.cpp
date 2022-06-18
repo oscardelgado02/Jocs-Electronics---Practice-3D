@@ -32,6 +32,10 @@ void EntityMesh::render()
 		shader->setUniform("u_texture", texture, 0);
 		shader->setUniform("u_model", model);
 		shader->setUniform("u_time", time);
+		shader->setUniform("u_camera_position", camera->eye);
+		shader->setUniform("u_sky_ambient", Vector3(255, 255, 255));
+		shader->setUniform("u_sun_color", Vector3(255,255,255));
+		shader->setUniform("u_shininess", 10.0f);
 
 		//do the draw call
 		mesh->render(GL_TRIANGLES);
