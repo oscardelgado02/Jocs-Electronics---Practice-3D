@@ -14,7 +14,7 @@ void Map::loadEntity(int type, Mesh* mesh, Texture* texture, Vector3 position, V
 	model.rotate((PI / 180) * rotation.y, Vector3(0, 1, 0)); //rotate in y
 	model.rotate((PI / 180) * rotation.z, Vector3(0, 0, 1)); //rotate in z
 
-	Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
+	Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/dark.fs");
 
 	switch (type) {
 	case PLAYER: world->addPlayerEntity("player", model, mesh, texture, shader, Vector4(1, 1, 1, 1)); break;

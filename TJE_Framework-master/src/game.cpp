@@ -36,7 +36,7 @@ World* world;
 Map map = Map();
 
 //Ambience sound
-Sound ambience_sound = Sound("data/sounds/ambience/mixkit-creepy-tomb-ambience-2500.wav", true);
+Sound ambience_sound;
 
 void initGrass() { //para poner un suelo de césped
 	for (size_t i = 0; i < grass_width; i++) {
@@ -67,6 +67,13 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	glEnable( GL_CULL_FACE ); //render both sides of every triangle
 	glEnable( GL_DEPTH_TEST ); //check the occlusions using the Z buffer
 
+	//sound init
+	//Inicializamos BASS al arrancar el juego (id_del_device, muestras por segundo, ...)
+	if (BASS_Init(-1, 44100, 0, 0, NULL) == false) //-1 significa usar el por defecto del sistema operativo
+	{
+		//error abriendo la tarjeta de sonido...
+	}
+
 	//create our camera
 	camera = new Camera();
 	camera->lookAt(Vector3(0.f, 1.9f, 22.0f),Vector3(0.f,1.9f,21.0f), Vector3(0.f,1.f,0.f)); //position the camera and point to 0,0,0
@@ -78,7 +85,7 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	grassmesh = Mesh::Get("data/SM_Env_Tile_Grass_01_25.obj");
 
 	// example of shader loading using the shaders manager
-	shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
+	shader = Shader::Get("data/shaders/basic.vs", "data/shaders/dark.fs");
 
 	//create world
 	world = World::getInstance();
@@ -92,6 +99,7 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
 
 	//ambience sound
+	ambience_sound = Sound("data/sounds/ambience/mixkit-creepy-tomb-ambience-2500.wav", true);
 	ambience_sound.PlayGameSound();
 }
 
@@ -116,7 +124,7 @@ void Game::render(void)
 	world->renderEntities();
 
 	//Draw the floor grid
-	drawGrid();
+	//drawGrid();
 
 	//render the FPS, Draw Calls, etc
 	drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
@@ -145,7 +153,7 @@ void Game::onKeyDown( SDL_KeyboardEvent event )
 {
 	switch(event.keysym.sym)
 	{
-		case SDLK_ESCAPE: must_exit = true; break; //ESC key, kill the app
+		case SDLK_ESCAPE: must_exit = true; BASS_Free(); break; //ESC key, kill the app
 		case SDLK_F1: Shader::ReloadAll(); break;
 		case SDLK_SPACE: world->deleteAllEntities(); break; //delete all entities
 	}

@@ -6,6 +6,8 @@
 PlayerEntity::PlayerEntity(std::string name, Matrix44 model, Mesh* mesh, Texture* texture, Shader* shader, Vector4 color) : EntityMesh(name, model, mesh, texture, shader, color) {
 	cooldown = 3.0f;
 	cooldown_enable = true;
+	footsteps = Sound("data/sounds/footsteps/mixkit-footsteps-in-woods-loop-533.wav", false);
+	exhale = Sound("data/sounds/exhale.wav", false);
 }
 
 PlayerEntity::~PlayerEntity(){}
@@ -17,6 +19,7 @@ void PlayerEntity::render() {
 void PlayerEntity::update(float dt) {
 	float speed = dt * 2.0f; //the speed is defined by the seconds_elapsed so it goes constant
 	Vector3 playerVel = Vector3(0.0f, 0.0f, 0.0f);
+	bool status_footsteps = false; //control footsteps sound
 
 	Camera* cam = Game::instance->camera;
 
@@ -40,7 +43,7 @@ void PlayerEntity::update(float dt) {
 		cooldown -= dt;
 	}
 	else {
-		if (cooldown < 3.0f) {
+		if (cooldown < 5.0f) {
 			cooldown += dt;
 		}
 	}
@@ -48,6 +51,8 @@ void PlayerEntity::update(float dt) {
 	//cooldown of running
 	if (cooldown < 0.0f) {
 		cooldown_enable = false;
+		//play exhale sound
+		exhale.PlayGameSound();
 	}
 	if (cooldown > 2.0f) {
 		cooldown_enable = true;
@@ -55,15 +60,30 @@ void PlayerEntity::update(float dt) {
 
 	if (Input::isKeyPressed(SDL_SCANCODE_W)) {
 		playerVel = Vector3(0.0f, 0.0f, 1.0f * speed);
+		//play footsteps sound
+		status_footsteps = true;
 	}
 	if (Input::isKeyPressed(SDL_SCANCODE_S)) {
 		playerVel = Vector3(0.0f, 0.0f, -1.0f * speed);
+		//play footsteps sound
+		status_footsteps = true;
 	}
 	if (Input::isKeyPressed(SDL_SCANCODE_A)) {
 		playerVel = Vector3(1.0f * speed, 0.0f, 0.0f);
+		//play footsteps sound
+		status_footsteps = true;
 	}
 	if (Input::isKeyPressed(SDL_SCANCODE_D)) {
 		playerVel = Vector3(-1.0f * speed, 0.0f, 0.0f);
+		//play footsteps sound
+		status_footsteps = true;
+	}
+
+	if (status_footsteps) {
+		footsteps.PlayGameSound(); //play
+	}
+	else {
+		footsteps.PauseGameSound(); //pause
 	}
 
 	detectPlayerCollision(cam, dt, playerVel);

@@ -1,12 +1,14 @@
 #pragma once
 
 #include "entitymesh.h"
+#include "sound.h"
 
 class PlayerEntity : public EntityMesh
 {
 public:
     float cooldown;
     bool cooldown_enable;
+    Sound footsteps; Sound exhale;
 
     //constructor
     PlayerEntity(std::string name, Matrix44 model, Mesh* mesh, Texture* texture, Shader* shader, Vector4 color);
