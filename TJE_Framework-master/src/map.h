@@ -10,6 +10,7 @@
 #define TEXTURE 2
 #define POSITION 3
 #define ROTATION 4
+#define SCALE 5
 
 //index of type of object
 #define PLAYER 0
@@ -25,7 +26,7 @@ public:
 	Map();
 
 	//methods
-	void Map::loadEntity(int type, Mesh* mesh, Texture* texture, Vector3 position, Vector3 rotation);
+	void Map::loadEntity(int type, Mesh* mesh, Texture* texture, Vector3 position, Vector3 rotation, Vector3 scale);
 	void loadMap(char* path);
 };
 

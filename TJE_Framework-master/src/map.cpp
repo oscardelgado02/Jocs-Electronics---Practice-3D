@@ -4,7 +4,7 @@ Map::Map() {
 	world = World::getInstance();
 }
 
-void Map::loadEntity(int type, Mesh* mesh, Texture* texture, Vector3 position, Vector3 rotation) {
+void Map::loadEntity(int type, Mesh* mesh, Texture* texture, Vector3 position, Vector3 rotation, Vector3 scale) {
 	
 	//creating model for the entity
 	Matrix44 model;
@@ -13,6 +13,8 @@ void Map::loadEntity(int type, Mesh* mesh, Texture* texture, Vector3 position, V
 	model.rotate((PI / 180) * rotation.x, Vector3(0, 1, 0)); //rotate in x
 	model.rotate((PI / 180) * rotation.y, Vector3(0, 1, 0)); //rotate in y
 	model.rotate((PI / 180) * rotation.z, Vector3(0, 0, 1)); //rotate in z
+
+	model.scale(scale.x, scale.y, scale.z);
 
 	Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/dark.fs");
 
@@ -46,6 +48,10 @@ void Map::loadMap(char* path) {
 		std::vector<std::string> rotation_str = split(line[ROTATION], ',');
 		Vector3 rotation = Vector3(stof(rotation_str[0]), stof(rotation_str[1]), stof(rotation_str[2]));
 
-		loadEntity(type, mesh, text, position, rotation);
+		//Rotation
+		std::vector<std::string> scale_str = split(line[SCALE], ',');
+		Vector3 scale = Vector3(stof(scale_str[0]), stof(scale_str[1]), stof(scale_str[2]));
+
+		loadEntity(type, mesh, text, position, rotation, scale);
 	}
 }
