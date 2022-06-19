@@ -145,6 +145,7 @@
     <ClCompile Include="..\..\src\fbo.cpp" />
     <ClCompile Include="..\..\src\framework.cpp" />
     <ClCompile Include="..\..\src\game.cpp" />
+    <ClCompile Include="..\..\src\ia.cpp" />
     <ClCompile Include="..\..\src\input.cpp" />
     <ClCompile Include="..\..\src\light.cpp" />
     <ClCompile Include="..\..\src\lightmanager.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="..\..\src\fbo.h" />
     <ClInclude Include="..\..\src\framework.h" />
     <ClInclude Include="..\..\src\game.h" />
+    <ClInclude Include="..\..\src\ia.h" />
     <ClInclude Include="..\..\src\includes.h" />
     <ClInclude Include="..\..\src\input.h" />
     <ClInclude Include="..\..\src\light.h" />

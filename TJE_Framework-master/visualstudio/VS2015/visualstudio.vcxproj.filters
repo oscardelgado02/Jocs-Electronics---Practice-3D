@@ -76,6 +76,7 @@
     <ClCompile Include="..\..\src\light.cpp" />
     <ClCompile Include="..\..\src\lightmanager.cpp" />
     <ClCompile Include="..\..\src\stage.cpp" />
+    <ClCompile Include="..\..\src\ia.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\camera.h" />
@@ -149,6 +150,7 @@
     <ClInclude Include="..\..\src\light.h" />
     <ClInclude Include="..\..\src\lightmanager.h" />
     <ClInclude Include="..\..\src\stage.h" />
+    <ClInclude Include="..\..\src\ia.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="extra">

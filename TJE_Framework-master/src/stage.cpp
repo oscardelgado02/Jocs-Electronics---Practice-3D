@@ -9,7 +9,7 @@ IntroStage::IntroStage() {}
 STAGE_ID IntroStage::GetId() { return STAGE_ID::INTRO; }
 
 void IntroStage::Render() {
-	drawText(2, 2, "PRESS SPACE TO START", Vector3(g->window_width/2.0, g->window_height/2.0, 1), 2);
+	drawText(2, 2, "PRESS SPACE TO START", Vector3(g->window_width / 2.0, 1.0, g->window_height / 2.0), 2);
 }
 
 void IntroStage::Update(float dt) {
@@ -24,7 +24,7 @@ TutorialStage::TutorialStage(){
 STAGE_ID TutorialStage::GetId() { return STAGE_ID::TUTORIAL; }
 
 void TutorialStage::Render() {
-	drawText(2, 2, "TUTORIAL", Vector3(g->window_width / 2.0, g->window_height / 2.0, 1), 2);
+	drawText(2, 2, "TUTORIAL", Vector3(g->window_width / 2.0, 1.0, g->window_height / 2.0), 2);
 }
 
 void TutorialStage::Update(float dt) {}
@@ -56,7 +56,7 @@ EndStage::EndStage() {
 STAGE_ID EndStage::GetId() { return STAGE_ID::END; }
 
 void EndStage::Render() {
-	drawText(2, 2, "END", Vector3(g->window_width / 2.0, g->window_height / 2.0, 1), 2);
+	drawText(2, 2, "END", Vector3(g->window_width / 2.0, 1.0, g->window_height / 2.0), 2);
 }
 
 void EndStage::Update(float dt) {

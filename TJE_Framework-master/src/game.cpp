@@ -9,9 +9,9 @@
 #include "world.h"
 #include "map.h"
 #include "sound.h"
-#include "pathfinders.h"
 #include "lightmanager.h"
 #include "stage.h"
+#include "ia.h"
 
 #include <cmath>
 
@@ -31,19 +31,6 @@ Texture* grasstexture = NULL;
 const int grass_width = 50;
 const int grass_height = 50;
 float padding = 2.5f;
-
-//Pathfinding variables
-int startx;
-int starty;
-int targetx;
-int targety;
-uint8* grid;
-int output[100];
-int path_steps;
-int W = 100;
-int H = 100;
-float tileSizeX = 10.0f;
-float tileSizeY = 10.0f;
 
 //World instance
 World* world;
@@ -67,6 +54,9 @@ void initGrass() { //para poner un suelo de césped
 			world->addEntityMesh("grass", model, grassmesh, grasstexture, shader, Vector4(1, 1, 1, 1));
 		}
 	}
+
+	//Matrix44 model;
+	//world->addEntityMesh("grass", model, grassmesh, grasstexture, Shader::Get("data/shaders/basic.vs", "data/shaders/dark.fs"), Vector4(1, 1, 1, 1));
 }
 
 Game::Game(int window_width, int window_height, SDL_Window* window)
@@ -82,15 +72,6 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	time = 0.0f;
 	elapsed_time = 0.0f;
 	mouse_locked = true;
-
-
-	//the map info should be an array W*H of bytes where 0 means block, 1 means walkable
-	grid = new uint8[W * H];
-
-	for (size_t i = 0; i < W * H; i++) {
-		grid[i] = 1;
-	}
-
 
 	//OpenGL flags
 	glEnable( GL_CULL_FACE ); //render both sides of every triangle
@@ -112,6 +93,8 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	grasstexture = new Texture();
 	grasstexture->load("data/texture_samurai.tga");
 	grassmesh = Mesh::Get("data/SM_Env_Tile_Grass_01_25.obj");
+	//grassmesh = new Mesh();
+	//grassmesh->createPlane(100);
 
 	// example of shader loading using the shaders manager
 	shader = Shader::Get("data/shaders/basic.vs", "data/shaders/dark.fs");
@@ -152,20 +135,6 @@ void Game::render(void)
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
 
-	/*if (path_steps > 0) {
-		Mesh m;
-		for (size_t i = 0; i < path_steps; i++) {
-			int index = output[i];
-			int x = index % W;
-			int y = index / W;
-			Vector3 pos;
-			pos.x = x * tileSizeX;
-			pos.z = y * tileSizeY;
-			m.vertices.push_back(pos);
-		}
-		RenderMesh(GL_LINE_STRIP, Matrix44(), &m, NULL, shader, camera);
-	}*/
-
 	//STAGE RENDER
 	GetStage(stages, currentStage)->Render();
 
@@ -182,8 +151,8 @@ void Game::render(void)
 void Game::update(double seconds_elapsed)
 {
 	if (Input::isKeyPressed(SDL_SCANCODE_P)) {
-		camera->eye = Vector3(camera->eye.x, camera->eye.y, camera->eye.z + 3.0f);
-		camera->center = Vector3(camera->center.x, camera->center.y, camera->center.z + 3.0f);
+		camera->eye = Vector3(camera->eye.x, camera->eye.y + 3.0f, camera->eye.z);
+		camera->center = Vector3(camera->center.x, camera->center.y + 3.0f, camera->center.z);
 	}
 
 	if (Input::wasKeyPressed(SDL_SCANCODE_SPACE)) { //used to skip stages
@@ -206,49 +175,6 @@ void Game::onKeyDown( SDL_KeyboardEvent event )
 	{
 		case SDLK_ESCAPE: must_exit = true; BASS_Free(); break; //ESC key, kill the app
 		case SDLK_F1: Shader::ReloadAll(); break;
-
-		case SDLK_4: {
-			Vector2 mouse = Input::mouse_position;
-			Game* g = Game::instance;
-			Vector3 dir = camera->getRayDirection(mouse.x, mouse.y, g->window_width, g->window_height);
-			Vector3 rayOrigin = camera->eye;
-
-			Vector3 spawnPos = RayPlaneCollision(Vector3(), Vector3(0, 1, 0), rayOrigin, dir);
-			startx = clamp(spawnPos.x / tileSizeX, 0, W);
-			starty = clamp(spawnPos.z / tileSizeY, 0, H);
-
-			break; //delete all entities
-		}
-
-		case SDLK_5: {
-			Vector2 mouse = Input::mouse_position;
-			Game* g = Game::instance;
-			Vector3 dir = camera->getRayDirection(mouse.x, mouse.y, g->window_width, g->window_height);
-			Vector3 rayOrigin = camera->eye;
-
-			Vector3 spawnPos = RayPlaneCollision(Vector3(), Vector3(0, 1, 0), rayOrigin, dir);
-			targetx = clamp(spawnPos.x / tileSizeX, 0, W);
-			targety = clamp(spawnPos.z / tileSizeY, 0, H);
-
-			//we call the path function, it returns the number of steps to reach target, otherwise 0
-			path_steps = AStarFindPathNoTieDiag(
-				startx, starty, //origin (tienen que ser enteros)
-				targetx, targety, //target (tienen que ser enteros)
-				grid, //pointer to map data
-				W, H, //map width and height
-				output, //pointer where the final path will be stored
-				100); //max supported steps of the final path
-
-			//check if there was a path
-			if (path_steps != -1)
-			{
-				for (int i = 0; i < path_steps; ++i)
-					std::cout << "X: " << (output[i] % W) << ", Y: " << floor(output[i] / W) << std::endl;
-			}
-
-			break; //delete all entities
-		}
-
 	}
 }
 
