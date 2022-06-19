@@ -17,7 +17,7 @@
 2 data/SM_Bld_Wall_01_11.obj data/texture_samurai.tga -1.700,0.000,-0.200 0.000,0.000,0.000 1.000,1.000,1.000  0
 2 data/SM_Bld_Wall_01_11.obj data/texture_samurai.tga 0.400,0.000,1.550 -90.000,0.000,0.000 1.000,1.000,1.000  0
 2 data/SM_Bld_Wall_01_11.obj data/texture_samurai.tga 0.650,0.000,1.550 -90.000,0.000,0.000 1.000,1.000,1.000  0
-1 data/monster/monster.obj data/monster/monster_grey.tga 0.000,0.000,0.500 0.000,0.000,0.000 0.0015,0.0015,0.0015  0
+1 data/monster/zombie.obj data/monster/zomtex/diffuse.png 0.000,0.000,0.500 0.000,0.000,0.000 1.0015,1.0015,1.0015  0
 2 data/SM_Bld_Wall_01_11.obj data/texture_samurai.tga 0.900,0.000,1.550 -90.000,0.000,0.000 1.000,1.000,1.000  0
 2 data/SM_Bld_Wall_01_11.obj data/texture_samurai.tga 1.150,0.000,1.550 -90.000,0.000,0.000 1.000,1.000,1.000  0
 2 data/SM_Bld_Wall_01_11.obj data/texture_samurai.tga 1.400,0.000,1.550 -90.000,0.000,0.000 1.000,1.000,1.000  0

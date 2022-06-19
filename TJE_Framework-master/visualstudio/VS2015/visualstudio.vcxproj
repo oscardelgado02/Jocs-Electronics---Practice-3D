@@ -146,6 +146,7 @@
     <ClCompile Include="..\..\src\framework.cpp" />
     <ClCompile Include="..\..\src\game.cpp" />
     <ClCompile Include="..\..\src\input.cpp" />
+    <ClCompile Include="..\..\src\light.cpp" />
     <ClCompile Include="..\..\src\main.cpp" />
     <ClCompile Include="..\..\src\map.cpp" />
     <ClCompile Include="..\..\src\mesh.cpp" />
@@ -179,6 +180,7 @@
     <ClInclude Include="..\..\src\game.h" />
     <ClInclude Include="..\..\src\includes.h" />
     <ClInclude Include="..\..\src\input.h" />
+    <ClInclude Include="..\..\src\light.h" />
     <ClInclude Include="..\..\src\map.h" />
     <ClInclude Include="..\..\src\mesh.h" />
     <ClInclude Include="..\..\src\pathfinders.h" />
