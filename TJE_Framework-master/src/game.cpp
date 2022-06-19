@@ -10,6 +10,7 @@
 #include "map.h"
 #include "sound.h"
 #include "pathfinders.h"
+#include "lightmanager.h"
 
 #include <cmath>
 
@@ -118,7 +119,6 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	//map.loadMap("data/level/level1.txt");
 	levelMap.loadMap("data/level/level1PROVISIONAL.txt");
 	initGrass();
-
 	
 	//hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse

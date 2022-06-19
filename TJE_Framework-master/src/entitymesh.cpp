@@ -75,7 +75,6 @@ void EntityMesh::setUniforms(Light* light, Camera* camera) {
 	shader->setUniform("u_light_position", light->position);
 	shader->setUniform("u_shininess", light->shininess);
 	shader->setUniform("u_max_distance", light->max_distance);
-	shader->setUniform("u_angle", light->angle);
 	shader->setUniform("u_intensity", light->intensity);
 }
 

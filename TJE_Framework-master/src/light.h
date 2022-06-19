@@ -12,10 +12,10 @@ public:
 	Vector3 color;
 	float shininess;
 	float max_distance;
-	float angle;
 	float intensity;
+	bool enabled;
 
 	//constructor
-	Light(Vector3 pos, Vector3 c, float s, float md, float a, float i);
+	Light(Vector3 pos, Vector3 c, float s, float md, float i);
 };
 

@@ -15,6 +15,6 @@ public:
 
 	void initLights();
 	std::vector<Light*> getLights();
-	void LightManager::updatePlayerLight(Vector3 pos);
+	void updatePlayerLight(Vector3 pos);
 };
 
