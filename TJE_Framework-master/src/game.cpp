@@ -9,6 +9,7 @@
 #include "world.h"
 #include "map.h"
 #include "sound.h"
+#include "pathfinders.h"
 
 #include <cmath>
 
@@ -29,11 +30,23 @@ const int grass_width = 50;
 const int grass_height = 50;
 float padding = 2.5f;
 
+//Pathfinding variables
+int startx;
+int starty;
+int targetx;
+int targety;
+uint8* grid;
+int output[100];
+int W = 100;
+int H = 100;
+float tileSizeX = 10.0f;
+float tileSizeY = 10.0f;
+
 //World instance
 World* world;
 
 //Map variable
-Map map = Map();
+Map levelMap = Map();
 
 //Ambience sound
 Sound ambience_sound;
@@ -62,6 +75,15 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	time = 0.0f;
 	elapsed_time = 0.0f;
 	mouse_locked = true;
+
+
+	//the map info should be an array W*H of bytes where 0 means block, 1 means walkable
+	grid = new uint8[W * H];
+
+	for (size_t i = 0; i < W * H; i++) {
+		grid[i] = 1;
+	}
+
 
 	//OpenGL flags
 	glEnable( GL_CULL_FACE ); //render both sides of every triangle
@@ -92,9 +114,10 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 
 	//init map
 	//map.loadMap("data/level/level1.txt");
-	map.loadMap("data/level/level1PROVISIONAL.txt");
+	levelMap.loadMap("data/level/level1PROVISIONAL.txt");
 	initGrass();
 
+	
 	//hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
 
@@ -156,6 +179,49 @@ void Game::onKeyDown( SDL_KeyboardEvent event )
 		case SDLK_ESCAPE: must_exit = true; BASS_Free(); break; //ESC key, kill the app
 		case SDLK_F1: Shader::ReloadAll(); break;
 		case SDLK_SPACE: world->deleteAllEntities(); break; //delete all entities
+
+		case SDLK_4: {
+			Vector2 mouse = Input::mouse_position;
+			Game* g = Game::instance;
+			Vector3 dir = camera->getRayDirection(mouse.x, mouse.y, g->window_width, g->window_height);
+			Vector3 rayOrigin = camera->eye;
+
+			Vector3 spawnPos = RayPlaneCollision(Vector3(), Vector3(0, 1, 0), rayOrigin, dir);
+			startx = clamp(spawnPos.x / tileSizeX, 0, W);
+			starty = clamp(spawnPos.z / tileSizeY, 0, H);
+
+			break; //delete all entities
+		}
+
+		case SDLK_5: {
+			Vector2 mouse = Input::mouse_position;
+			Game* g = Game::instance;
+			Vector3 dir = camera->getRayDirection(mouse.x, mouse.y, g->window_width, g->window_height);
+			Vector3 rayOrigin = camera->eye;
+
+			Vector3 spawnPos = RayPlaneCollision(Vector3(), Vector3(0, 1, 0), rayOrigin, dir);
+			targetx = clamp(spawnPos.x / tileSizeX, 0, W);
+			targety = clamp(spawnPos.z / tileSizeY, 0, H);
+
+			//we call the path function, it returns the number of steps to reach target, otherwise 0
+			int path_steps = AStarFindPathNoTieDiag(
+				startx, starty, //origin (tienen que ser enteros)
+				targetx, targety, //target (tienen que ser enteros)
+				grid, //pointer to map data
+				W, H, //map width and height
+				output, //pointer where the final path will be stored
+				100); //max supported steps of the final path
+
+			//check if there was a path
+			if (path_steps != -1)
+			{
+				for (int i = 0; i < path_steps; ++i)
+					std::cout << "X: " << (output[i] % W) << ", Y: " << floor(output[i] / W) << std::endl;
+			}
+
+			break; //delete all entities
+		}
+
 	}
 }
 

@@ -72,6 +72,7 @@
     <ClCompile Include="..\..\src\enemyentity.cpp" />
     <ClCompile Include="..\..\src\wallentity.cpp" />
     <ClCompile Include="..\..\src\sound.cpp" />
+    <ClCompile Include="..\..\src\pathfinders.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\camera.h" />
@@ -141,6 +142,7 @@
     <ClInclude Include="..\..\src\enemyentity.h" />
     <ClInclude Include="..\..\src\wallentity.h" />
     <ClInclude Include="..\..\src\sound.h" />
+    <ClInclude Include="..\..\src\pathfinders.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="extra">
