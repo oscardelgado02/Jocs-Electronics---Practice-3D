@@ -13,10 +13,13 @@ LightManager::LightManager() {
 }
 
 void LightManager::initLights() {
-	lights.push_back(new Light(Vector3(255, 255, 255), 10.0, 1000.0, 0.0, 0.15));
-	lights.push_back(new Light(Vector3(255, 255, 255), 10.0, 1000.0, 0.0, 1.0));
+	lights.push_back(new Light(Vector3(0, 0, 0), Vector3(255, 255, 255), 10.0, 5.0, 0.0, 0.5));
 }
 
 std::vector<Light*> LightManager::getLights() {
 	return lights;
+}
+
+void LightManager::updatePlayerLight(Vector3 pos) {
+	lights[0]->position = pos;
 }

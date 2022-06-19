@@ -27,4 +27,5 @@ public:
     void update(float dt);
     bool checkFrustum();
     void setUniforms(Light* light, Camera* camera);
+    void multiPass(std::vector<Light*> lights, Camera* camera);
 };

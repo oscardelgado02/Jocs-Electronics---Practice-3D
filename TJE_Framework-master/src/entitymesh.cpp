@@ -27,11 +27,8 @@ void EntityMesh::render()
 		//enable shader
 		shader->enable();
 
-		//upload uniforms
-		setUniforms(lights[0], camera);
-
-		//do the draw call
-		mesh->render(GL_TRIANGLES);
+		//multipass
+		multiPass(lights, camera);
 
 		//disable shader
 		shader->disable();
@@ -75,6 +72,37 @@ void EntityMesh::setUniforms(Light* light, Camera* camera) {
 	shader->setUniform("u_time", time);
 	shader->setUniform("u_camera_position", camera->eye);
 	shader->setUniform("u_light_color", light->color);
+	shader->setUniform("u_light_position", light->position);
 	shader->setUniform("u_shininess", light->shininess);
+	shader->setUniform("u_max_distance", light->max_distance);
+	shader->setUniform("u_angle", light->angle);
 	shader->setUniform("u_intensity", light->intensity);
+}
+
+void EntityMesh::multiPass(std::vector<Light*> lights, Camera* camera) {
+	//allow to render pixels that have the same depth as the one in the depth buffer
+	glDepthFunc(GL_LEQUAL);
+
+	//set blending mode to additive
+	//this will collide with materials with blend...
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+
+	for (int i = 0; i < lights.size(); ++i)
+	{
+		//first pass doesn't use blending
+		if (i == 0)
+			glDisable(GL_BLEND);
+		else
+			glEnable(GL_BLEND);
+
+		//pass the light data to the shader
+		setUniforms(lights[i], camera);
+
+		//do the draw call
+		mesh->render(GL_TRIANGLES);
+	}
+
+	glDisable(GL_BLEND);
+	glDepthFunc(GL_LESS); //as default
+
 }

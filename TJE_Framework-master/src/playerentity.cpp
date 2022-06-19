@@ -89,6 +89,9 @@ void PlayerEntity::update(float dt) {
 	detectPlayerCollision(cam, dt, playerVel);
 	//detectPlayerCollision2(cam, dt, playerVel, speed);
 	moveFirstPersonCam(cam, playerVel);
+
+	//update lantern position
+	LightManager::getInstance()->updatePlayerLight(this->model.getTranslation());
 	
 	/*
 	printf("Cam: %f,%f,%f\n", cam->eye.x, cam->eye.y, cam->eye.z);

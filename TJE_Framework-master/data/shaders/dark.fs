@@ -10,7 +10,10 @@ uniform sampler2D u_texture;
 uniform float u_time;
 uniform vec3 u_camera_position;
 uniform vec3 u_light_color;
+uniform vec3 u_light_position;
 uniform float u_shininess;
+uniform float u_max_distance;
+uniform float u_angle;
 uniform float u_intensity;
 
 void main()
@@ -18,24 +21,29 @@ void main()
 	vec2 uv = v_uv;
 	vec3 N = normalize(v_normal);
 
-	vec3 V = normalize(u_camera_position - v_world_position);
-	vec3 R = reflect(V,N);
-	vec3 L = normalize(v_position - v_world_position);
-
 	vec3 light_color = normalize(u_light_color);
 
-	vec3 color = u_intensity * u_color.xyz;
+	vec3 V = normalize(u_camera_position - v_world_position);
+	vec3 L = u_light_position - v_world_position;
 
-	//ambient
-	vec3 ambient = color * light_color;
+	float distance = length(L);
 
-	//diffuse
-	vec3 diffuse = color * light_color * clamp(dot(N,L), 0.0, 1.0);
+	float global_intensity = 0.15;
 
-	//specular (careful with the glossiness levels)
-	vec3 specular = color * light_color * pow( clamp(dot(R, V), 0.0, 1.0), u_shininess);
+	L/=distance;
+	float atenuation = u_max_distance - distance;
+	atenuation = atenuation/u_max_distance;
+	atenuation = max(atenuation, 0.0);
+	atenuation *= pow(atenuation,2);
 
-	color = ambient + diffuse + specular;
+	float NdotL = clamp(dot(N,L), 0.0, 1.0);
+
+	vec3 R = L-2.0*NdotL*N;
+
+	light_color+=((NdotL*u_light_color)*atenuation);
+
+	vec3 color = global_intensity*u_color.xyz*(light_color);
+
 
 	gl_FragColor = vec4(color, 1.0) * texture2D(u_texture, uv);
 }
