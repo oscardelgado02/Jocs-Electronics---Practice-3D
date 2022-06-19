@@ -11,6 +11,7 @@
 #include "sound.h"
 #include "pathfinders.h"
 #include "lightmanager.h"
+#include "stage.h"
 
 #include <cmath>
 
@@ -53,6 +54,9 @@ Map levelMap = Map();
 //Ambience sound
 Sound ambience_sound;
 
+//stages variables
+std::vector<Stage*> stages;
+STAGE_ID currentStage = STAGE_ID::INTRO;
 
 void initGrass() { //para poner un suelo de césped
 	for (size_t i = 0; i < grass_width; i++) {
@@ -126,6 +130,9 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	//ambience sound
 	ambience_sound = Sound("data/sounds/ambience/mixkit-creepy-tomb-ambience-2500.wav", true);
 	ambience_sound.PlayGameSound();
+
+	//Stages initialization
+	InitStages(&stages);
 }
 
 //what to do when the image has to be draw
@@ -159,8 +166,8 @@ void Game::render(void)
 		RenderMesh(GL_LINE_STRIP, Matrix44(), &m, NULL, shader, camera);
 	}*/
 
-	//render entities
-	world->renderEntities();
+	//STAGE RENDER
+	GetStage(stages, currentStage)->Render();
 
 	//Draw the floor grid
 	//drawGrid();
@@ -179,12 +186,17 @@ void Game::update(double seconds_elapsed)
 		camera->center = Vector3(camera->center.x, camera->center.y, camera->center.z + 3.0f);
 	}
 
+	if (Input::wasKeyPressed(SDL_SCANCODE_SPACE)) { //used to skip stages
+		int nextStageIndex = (((int)currentStage) + 1);
+		if (nextStageIndex >= stages.size()) must_exit = true; else SetStage((STAGE_ID)nextStageIndex, &currentStage);
+	}
+
 	//to navigate with the mouse fixed in the middle
 	if (mouse_locked)
 		Input::centerMouse();
 
-	//update entities
-	world->updateEntities(seconds_elapsed);
+	//STAGE UPDATE
+	GetStage(stages, currentStage)->Update(seconds_elapsed);
 }
 
 //Keyboard event handler (sync input)
@@ -194,7 +206,6 @@ void Game::onKeyDown( SDL_KeyboardEvent event )
 	{
 		case SDLK_ESCAPE: must_exit = true; BASS_Free(); break; //ESC key, kill the app
 		case SDLK_F1: Shader::ReloadAll(); break;
-		case SDLK_SPACE: world->deleteAllEntities(); break; //delete all entities
 
 		case SDLK_4: {
 			Vector2 mouse = Input::mouse_position;

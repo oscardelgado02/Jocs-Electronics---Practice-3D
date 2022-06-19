@@ -1,6 +1,8 @@
 #pragma once
 
 #include "input.h"
+#include "world.h"
+#include "game.h"
 
 enum class STAGE_ID {
 	INTRO = 0,
@@ -12,6 +14,8 @@ enum class STAGE_ID {
 class Stage
 {
 public:
+	Game* g = Game::instance;
+	World* world = World::getInstance(); //we get world instance
 
 	//constructors
 	Stage();
@@ -28,6 +32,7 @@ void SetStage(STAGE_ID id, STAGE_ID* currentStage);
 
 class IntroStage : public Stage {
 public:
+
 	//constructor
 	IntroStage();
 
