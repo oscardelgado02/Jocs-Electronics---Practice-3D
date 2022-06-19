@@ -2,33 +2,11 @@
 
 #include "input.h"
 
-//images variables
-#define FONT 0
-#define MINIFONT 1
-#define KEYS 2
-#define PLAYER_IMAGE 3
-#define GOAL_IMAGE 4
-#define PLANET_IMAGE 5
-#define PARTICLE_IMAGE 6
-#define ROCK_IMAGE 7
-#define TUTO_BACKGROUND 8
-#define FINAL_BACKGROUND 9
-
-//key variables
-#define LEFT_KEY_IMAGE 0
-#define UP_KEY_IMAGE 1
-#define DOWN_KEY_IMAGE 2
-#define RIGHT_KEY_IMAGE 3
-#define Z_KEY_IMAGE 4
-#define X_KEY_IMAGE 5
-#define NUMBER_KEY_IMAGE 6
-
 enum class STAGE_ID {
 	INTRO = 0,
-	TUTORIAL1 = 1,
-	TUTORIAL2 = 2,
-	PLAY = 3,
-	END = 4
+	TUTORIAL = 1,
+	PLAY = 2,
+	END = 3
 };
 
 class Stage
