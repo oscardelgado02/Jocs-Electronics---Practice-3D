@@ -37,6 +37,7 @@ int targetx;
 int targety;
 uint8* grid;
 int output[100];
+int path_steps;
 int W = 100;
 int H = 100;
 float tileSizeX = 10.0f;
@@ -143,6 +144,20 @@ void Game::render(void)
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
 
+	/*if (path_steps > 0) {
+		Mesh m;
+		for (size_t i = 0; i < path_steps; i++) {
+			int index = output[i];
+			int x = index % W;
+			int y = index / W;
+			Vector3 pos;
+			pos.x = x * tileSizeX;
+			pos.z = y * tileSizeY;
+			m.vertices.push_back(pos);
+		}
+		RenderMesh(GL_LINE_STRIP, Matrix44(), &m, NULL, shader, camera);
+	}*/
+
 	//render entities
 	world->renderEntities();
 
@@ -204,7 +219,7 @@ void Game::onKeyDown( SDL_KeyboardEvent event )
 			targety = clamp(spawnPos.z / tileSizeY, 0, H);
 
 			//we call the path function, it returns the number of steps to reach target, otherwise 0
-			int path_steps = AStarFindPathNoTieDiag(
+			path_steps = AStarFindPathNoTieDiag(
 				startx, starty, //origin (tienen que ser enteros)
 				targetx, targety, //target (tienen que ser enteros)
 				grid, //pointer to map data
