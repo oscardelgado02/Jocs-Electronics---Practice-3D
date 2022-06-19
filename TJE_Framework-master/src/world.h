@@ -6,6 +6,7 @@
 #include "playerentity.h"
 #include "enemyentity.h"
 #include "wallentity.h"
+#include "light.h"
 
 class World
 {

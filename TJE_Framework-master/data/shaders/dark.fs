@@ -9,9 +9,9 @@ uniform vec4 u_color;
 uniform sampler2D u_texture;
 uniform float u_time;
 uniform vec3 u_camera_position;
-uniform vec3 u_sky_ambient;
-uniform vec3 u_sun_color;
+uniform vec3 u_light_color;
 uniform float u_shininess;
+uniform float u_intensity;
 
 void main()
 {
@@ -22,19 +22,18 @@ void main()
 	vec3 R = reflect(V,N);
 	vec3 L = normalize(v_position - v_world_position);
 
-	vec3 sky_ambient = normalize(u_sky_ambient);
-	vec3 sun_color = normalize(u_sun_color);
+	vec3 light_color = normalize(u_light_color);
 
-	vec3 color = 0.15 * u_color.xyz;
+	vec3 color = u_intensity * u_color.xyz;
 
 	//ambient
-	vec3 ambient = color * sky_ambient;
+	vec3 ambient = color * light_color;
 
 	//diffuse
-	vec3 diffuse = color * sun_color * clamp(dot(N,L), 0.0, 1.0);
+	vec3 diffuse = color * light_color * clamp(dot(N,L), 0.0, 1.0);
 
 	//specular (careful with the glossiness levels)
-	vec3 specular = color * sun_color * pow( clamp(dot(R, V), 0.0, 1.0), u_shininess);
+	vec3 specular = color * light_color * pow( clamp(dot(R, V), 0.0, 1.0), u_shininess);
 
 	color = ambient + diffuse + specular;
 

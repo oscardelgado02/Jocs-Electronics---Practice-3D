@@ -20,6 +20,7 @@ void EntityMesh::render()
 	//get the last camera that was activated
 	Camera* camera = Camera::current;
 	Matrix44 model = this->model;
+	std::vector<Light*> lights = LightManager::getInstance()->getLights();
 
 	if (shader && checkFrustum())
 	{
@@ -27,15 +28,7 @@ void EntityMesh::render()
 		shader->enable();
 
 		//upload uniforms
-		shader->setUniform("u_color", color);
-		shader->setUniform("u_viewprojection", camera->viewprojection_matrix);
-		shader->setUniform("u_texture", texture, 0);
-		shader->setUniform("u_model", model);
-		shader->setUniform("u_time", time);
-		shader->setUniform("u_camera_position", camera->eye);
-		shader->setUniform("u_sky_ambient", Vector3(255, 255, 255));
-		shader->setUniform("u_sun_color", Vector3(255,255,255));
-		shader->setUniform("u_shininess", 10.0f);
+		setUniforms(lights[0], camera);
 
 		//do the draw call
 		mesh->render(GL_TRIANGLES);
@@ -72,4 +65,16 @@ bool EntityMesh::checkFrustum() {
 	}
 
 	return true;
+}
+
+void EntityMesh::setUniforms(Light* light, Camera* camera) {
+	shader->setUniform("u_color", color);
+	shader->setUniform("u_viewprojection", camera->viewprojection_matrix);
+	shader->setUniform("u_texture", texture, 0);
+	shader->setUniform("u_model", model);
+	shader->setUniform("u_time", time);
+	shader->setUniform("u_camera_position", camera->eye);
+	shader->setUniform("u_light_color", light->color);
+	shader->setUniform("u_shininess", light->shininess);
+	shader->setUniform("u_intensity", light->intensity);
 }

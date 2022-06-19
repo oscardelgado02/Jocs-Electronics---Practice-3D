@@ -41,6 +41,8 @@ void World::addWallEntity(std::string name, Matrix44 model, Mesh* mesh, Texture*
 }
 
 void World::renderEntities() {
+	
+
 	for (int i = 0; i < entities.size(); i++) {
 		entities[i]->render();
 	}

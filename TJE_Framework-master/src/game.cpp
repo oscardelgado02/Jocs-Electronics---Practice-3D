@@ -52,6 +52,7 @@ Map levelMap = Map();
 //Ambience sound
 Sound ambience_sound;
 
+
 void initGrass() { //para poner un suelo de césped
 	for (size_t i = 0; i < grass_width; i++) {
 		for (size_t j = 0; j < grass_height; j++) {

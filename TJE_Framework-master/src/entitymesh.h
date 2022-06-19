@@ -5,6 +5,8 @@
 #include "texture.h"
 #include "shader.h"
 #include "input.h"
+#include "light.h"
+#include "lightmanager.h"
 
 class EntityMesh : public Entity
 {
@@ -24,4 +26,5 @@ public:
     void render();
     void update(float dt);
     bool checkFrustum();
+    void setUniforms(Light* light, Camera* camera);
 };
