@@ -14,7 +14,7 @@ void Map::loadEntity(int type, Mesh* mesh, Texture* texture, Vector3 position, V
 	model.rotate((PI / 180) * rotation.y, Vector3(0, 1, 0)); //rotate in y
 	model.rotate((PI / 180) * rotation.z, Vector3(0, 0, 1)); //rotate in z
 
-	model.scale(scale.x, scale.y, scale.z);
+	model.scale(10.0f*scale.x, 10.0f * scale.y, 10.0f * scale.z);
 
 	Shader* shader = Shader::Get("data/shaders/basic.vs", "data/shaders/dark.fs");
 

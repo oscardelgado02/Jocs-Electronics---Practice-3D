@@ -115,7 +115,7 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 
 	//init map
 	//map.loadMap("data/level/level1.txt");
-	levelMap.loadMap("data/level/level1PROVISIONAL.txt");
+	levelMap.loadMap("data/level/map.txt");
 	initGrass();
 	initSky();
 	
