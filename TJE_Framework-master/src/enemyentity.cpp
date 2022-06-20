@@ -12,12 +12,13 @@ void EnemyEntity::render() {
 
 void EnemyEntity::update(float dt) {
 	float speed = 2.0f;
+	float max_distance = 20.0f;
 
 	//Vector3 nextStep = ia.sendStep(model.getTranslation());
 	
-	if (!this->checkFrustum()) {
+	if (!this->checkFrustum() || distanceToCam() > max_distance) {
+		
 		Vector3 nextStep = Camera::current->eye;
-
 		Vector3 direction = normalize(nextStep - model.getTranslation());
 		Vector3 nextPos = direction * speed * dt;
 

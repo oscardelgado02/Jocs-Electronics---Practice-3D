@@ -20,7 +20,7 @@ void main()
 	vec2 uv = v_uv;
 	vec3 N = normalize(v_normal);
 
-	vec3 light_color = normalize(u_light_color);
+	vec3 light_color = normalize(u_light_color) * u_intensity;
 
 	vec3 V = normalize(u_camera_position - v_world_position);
 	vec3 L = u_light_position - v_world_position;
@@ -35,7 +35,7 @@ void main()
 	atenuation = max(atenuation, 0.0);
 	atenuation *= pow(atenuation,2);
 
-	float NdotL = clamp(dot(N,L), 0.0, u_intensity);
+	float NdotL = clamp(dot(N,L), 0.0, 1.0);
 
 	vec3 R = L-2.0*NdotL*N;
 

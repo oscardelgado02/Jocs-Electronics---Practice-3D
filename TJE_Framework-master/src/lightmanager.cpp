@@ -13,7 +13,7 @@ LightManager::LightManager() {
 }
 
 void LightManager::initLights() {
-	lights.push_back(new Light(Vector3(0, 0, 0), Vector3(215, 178, 49), 10.0, 10.0, 0.2));
+	lights.push_back(new Light(Vector3(0, 0, 0), Vector3(215, 178, 49), 10.0, 20.0, 0.5));
 }
 
 std::vector<Light*> LightManager::getLights() {
