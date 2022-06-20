@@ -59,6 +59,17 @@ void initGrass() { //para poner un suelo de césped
 	//world->addEntityMesh("grass", model, grassmesh, grasstexture, Shader::Get("data/shaders/basic.vs", "data/shaders/dark.fs"), Vector4(1, 1, 1, 1));
 }
 
+void initSky() { //para poner un cielo
+	Matrix44 model;
+	Mesh* sky_mesh = NULL;
+	Texture* sky_texture = NULL;
+	sky_texture = new Texture();
+	sky_texture->load("data/sky/stars.tga");
+	sky_mesh = Mesh::Get("data/sky/box.ase");
+
+	world->addEntityMesh("sky", model, sky_mesh, sky_texture, shader, Vector4(1, 1, 1, 1));
+}
+
 Game::Game(int window_width, int window_height, SDL_Window* window)
 {
 	this->window_width = window_width;
@@ -106,6 +117,7 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	//map.loadMap("data/level/level1.txt");
 	levelMap.loadMap("data/level/level1PROVISIONAL.txt");
 	initGrass();
+	initSky();
 	
 	//hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
