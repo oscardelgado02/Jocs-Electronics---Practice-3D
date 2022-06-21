@@ -16,6 +16,7 @@ class Stage
 public:
 	Game* g = Game::instance;
 	World* world = World::getInstance(); //we get world instance
+	Camera* camera;
 
 	//constructors
 	Stage();

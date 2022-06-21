@@ -21,5 +21,6 @@ public:
     void moveFirstPersonCam(Camera* cam, Vector3 position);
     void detectPlayerCollision(Camera* cam, float dt, Vector3 playerVel);
     void detectPlayerCollision2(Camera* cam, float dt, Vector3 playerVel, float speed);
+    Camera* getPlayerCamera();
 };
 

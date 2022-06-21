@@ -8,13 +8,6 @@ PlayerEntity::PlayerEntity(std::string name, Matrix44 model, Mesh* mesh, Texture
 	cooldown_enable = true;
 	footsteps = Sound("data/sounds/footsteps/mixkit-footsteps-in-woods-loop-533.wav", false);
 	exhale = Sound("data/sounds/exhale.wav", false);
-
-	//set position of the camera to the player pos
-
-	Game* g = Game::instance;
-	Camera* cam = g->camera;
-	cam->lookAt(Vector3(model.getTranslation().x, 1.9f, model.getTranslation().z), Vector3(model.getTranslation().x, 1.9f, model.getTranslation().z-1), Vector3(0.f, 1.f, 0.f)); //position the camera and point to 0,0,0
-	cam->setPerspective(70.f,g->window_width/(float)g->window_height,0.1f,10000.f); //set the projection, we want to be perspective
 }
 
 PlayerEntity::~PlayerEntity(){}
@@ -102,6 +95,7 @@ void PlayerEntity::update(float dt) {
 	
 	/*
 	printf("Cam: %f,%f,%f\n", cam->eye.x, cam->eye.y, cam->eye.z);
+	printf("Cam center: %f,%f,%f\n", cam->center.x, cam->center.y, cam->center.z);
 	printf("Model: %f,%f,%f\n\n", this->model.getTranslation().x, this->model.getTranslation().y, this->model.getTranslation().z);
 	*/
 }
@@ -237,4 +231,16 @@ void PlayerEntity::detectPlayerCollision2(Camera* cam, float dt, Vector3 playerV
 
 		cam->updateViewMatrix();
 	}
+}
+
+Camera* PlayerEntity::getPlayerCamera() {
+
+	//set position of the camera to the player pos
+
+	Game* g = Game::instance;
+	Camera* cam = new Camera();
+	cam->lookAt(Vector3(model.getTranslation().x, 1.9f, model.getTranslation().z), Vector3(model.getTranslation().x, 1.9f, model.getTranslation().z - 1), Vector3(0.f, 1.f, 0.f)); //position the camera and point to 0,0,0
+	cam->setPerspective(70.f, g->window_width / (float)g->window_height, 0.1f, 10000.f); //set the projection, we want to be perspective
+
+	return cam;
 }

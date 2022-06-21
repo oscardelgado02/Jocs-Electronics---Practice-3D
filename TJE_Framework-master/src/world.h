@@ -33,5 +33,6 @@ public:
 	void updateEntities(float dt);
 	void deleteAllEntities();
 	int getEntitiesSize();
+	Camera* getPlayerEntityCamera();
 };
 

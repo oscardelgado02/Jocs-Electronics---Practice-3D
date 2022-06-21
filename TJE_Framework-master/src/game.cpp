@@ -66,6 +66,7 @@ void initSky() { //para poner un cielo
 	sky_texture = new Texture();
 	sky_texture->load("data/sky/stars.tga");
 	sky_mesh = Mesh::Get("data/sky/box.ase");
+	model.scale(1.0f, 1.0f, 5.0f);
 
 	world->addEntityMesh("sky", model, sky_mesh, sky_texture, shader, Vector4(1, 1, 1, 1));
 }
@@ -121,7 +122,8 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
 
 	//ambience sound
-	ambience_sound = Sound("data/sounds/ambience/mixkit-creepy-tomb-ambience-2500.wav", true);
+	//ambience_sound = Sound("data/sounds/ambience/mixkit-creepy-tomb-ambience-2500.wav", true);
+	ambience_sound = Sound("data/sounds/ambience/mixkit-scary-forest-at-night-2486.wav", true);
 	ambience_sound.PlayGameSound();
 
 	//Stages initialization

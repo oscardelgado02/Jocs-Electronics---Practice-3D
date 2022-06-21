@@ -63,3 +63,15 @@ void World::deleteAllEntities() {
 int World::getEntitiesSize() {
 	return entities.size();
 }
+
+Camera* World::getPlayerEntityCamera() {
+
+	//set position of the camera to the player pos
+
+	for (int i = 0; i < entities.size(); i++) {
+		if (entities[i]->name.compare("player") == 0) {
+			PlayerEntity* player = (PlayerEntity*)entities[i];
+			return player->getPlayerCamera();
+		}
+	}
+}
