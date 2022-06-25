@@ -28,8 +28,10 @@ Game* Game::instance = NULL;
 
 Mesh* grassmesh = NULL;
 Texture* grasstexture = NULL;
-const int grass_width = 50;
-const int grass_height = 50;
+const int grass_width1 = 40;
+const int grass_height1 = 15;
+const int grass_height2 = 24;
+const int grass_height3 = 30;
 float padding = 2.5f;
 
 //World instance
@@ -46,10 +48,24 @@ std::vector<Stage*> stages;
 STAGE_ID currentStage = STAGE_ID::INTRO;
 
 void initGrass() { //para poner un suelo de césped
-	for (size_t i = 0; i < grass_width; i++) {
-		for (size_t j = 0; j < grass_height; j++) {
+	for (size_t i = 0; i < grass_width1; i++) {
+		for (size_t j = 0; j < grass_height1; j++) {
 			Matrix44 model;
-			model.translate((i * padding) - grass_width, 0.0f, (j * padding) - grass_height);
+			model.translate((i * padding) - grass_width1, 0.0f, (j * padding) - grass_height1);
+
+			world->addEntityMesh("grass", model, grassmesh, grasstexture, shader, Vector4(1, 1, 1, 1));
+		}
+
+		for (size_t j = 0; j <  grass_height2; j++) {
+			Matrix44 model;
+			model.translate((i * padding) - grass_width1, 0.0f, (j * padding) - 66 - grass_height2);
+
+			world->addEntityMesh("grass", model, grassmesh, grasstexture, shader, Vector4(1, 1, 1, 1));
+		}
+
+		for (size_t j = 0; j < grass_height3; j++) {
+			Matrix44 model;
+			model.translate((i * padding) - grass_width1, 0.0f, (j * padding) - 180 - grass_height3);
 
 			world->addEntityMesh("grass", model, grassmesh, grasstexture, shader, Vector4(1, 1, 1, 1));
 		}
@@ -114,9 +130,9 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 
 	//init map
 	//map.loadMap("data/level/level1.txt");
-	levelMap.loadMap("data/level/map.txt");
+	levelMap.loadMap("data/level/leveldefinitivo.txt");
 	initGrass();
-	initSky();
+	//initSky();
 	
 	//hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
