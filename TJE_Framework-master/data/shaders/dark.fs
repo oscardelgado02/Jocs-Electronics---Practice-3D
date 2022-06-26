@@ -27,7 +27,7 @@ void main()
 
 	float distance = length(L);
 
-	float global_intensity = 0.5;
+	float global_intensity = 0.15;
 
 	L/=distance;
 	float atenuation = u_max_distance - distance;
