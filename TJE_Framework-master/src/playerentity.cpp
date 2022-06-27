@@ -28,36 +28,9 @@ void PlayerEntity::update(float dt) {
 	cam->rotate(Input::mouse_delta.x * 0.002f, Vector3(0.0f, -1.0f, 0.0f));
 	cam->rotate(Input::mouse_delta.y * 0.002f, cam->getLocalVector(Vector3(-1.0f, 0.0f, 0.0f)));
 
-	/*
-	if ((Input::mouse_state))
-	{
-		model.rotate(Input::mouse_delta.x * 0.005f, Vector3(0.0f, -1.0f, 0.0f));
-		cam->rotate(Input::mouse_delta.x * 0.005f, Vector3(0.0f,-1.0f,0.0f));
-		cam->rotate(Input::mouse_delta.y * 0.005f, cam->getLocalVector( Vector3(-1.0f,0.0f,0.0f)));
-	}
-	*/
+	speed = runAndCooldown(dt, speed);
 
-	//async input to move the camera around
-	if (Input::isKeyPressed(SDL_SCANCODE_LSHIFT) && cooldown_enable) {
-		speed *= 3; //move faster with left shift
-		cooldown -= dt;
-	}
-	else {
-		if (cooldown < 5.0f) {
-			cooldown += dt;
-		}
-	}
-
-	//cooldown of running
-	if (cooldown < 0.0f) {
-		cooldown_enable = false;
-		//play exhale sound
-		exhale.PlayGameSound();
-	}
-	if (cooldown > 2.0f) {
-		cooldown_enable = true;
-	}
-
+	//player movement
 	if (Input::isKeyPressed(SDL_SCANCODE_W)) {
 		playerVel = Vector3(0.0f, 0.0f, 1.0f * speed);
 		//play footsteps sound
@@ -79,13 +52,7 @@ void PlayerEntity::update(float dt) {
 		status_footsteps = true;
 	}
 
-	if (status_footsteps) {
-		footsteps.PlayGameSound(); //play
-	}
-	else {
-		footsteps.PauseGameSound(); //pause
-	}
-
+	playSounds(status_footsteps);
 	detectPlayerCollision(cam, dt, playerVel);
 	//detectPlayerCollision2(cam, dt, playerVel, speed);
 	moveFirstPersonCam(cam, playerVel);
@@ -120,6 +87,41 @@ void PlayerEntity::moveFirstPersonCam(Camera* cam, Vector3 delta) {
 	this->model.translateGlobal(modelCoordinates.x, 0.0f, modelCoordinates.z);
 
 	cam->updateViewMatrix();
+}
+
+float PlayerEntity::runAndCooldown(float dt, float speed) {
+	//async input to move the camera around
+	if (Input::isKeyPressed(SDL_SCANCODE_LSHIFT) && cooldown_enable) {
+		speed *= 3; //move faster with left shift
+		cooldown -= dt;
+	}
+	else {
+		if (cooldown < 5.0f) {
+			cooldown += dt;
+		}
+	}
+
+	return speed;
+}
+
+void PlayerEntity::playSounds(bool status_footsteps) {
+
+	//cooldown of running
+	if (cooldown < 0.0f) {
+		cooldown_enable = false;
+		//play exhale sound
+		exhale.PlayGameSound();
+	}
+	if (cooldown > 2.0f) {
+		cooldown_enable = true;
+	}
+
+	if (status_footsteps) {
+		footsteps.PlayGameSound(); //play
+	}
+	else {
+		footsteps.PauseGameSound(); //pause
+	}
 }
 
 void PlayerEntity::detectPlayerCollision(Camera* cam, float dt, Vector3 playerVel) {

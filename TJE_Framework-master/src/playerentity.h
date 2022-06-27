@@ -19,6 +19,8 @@ public:
     void render();
     void update(float dt);
     void moveFirstPersonCam(Camera* cam, Vector3 position);
+    float runAndCooldown(float dt, float speed);
+    void playSounds(bool status_footsteps);
     void detectPlayerCollision(Camera* cam, float dt, Vector3 playerVel);
     void detectPlayerCollision2(Camera* cam, float dt, Vector3 playerVel, float speed);
     Camera* getPlayerCamera();
