@@ -13,8 +13,8 @@ LightManager::LightManager() {
 }
 
 void LightManager::initLights() {
-	lights.push_back(new Light(Vector3(0, 3000.0, 500.0), Vector3(215, 178, 49), 10.0, 500.0, 0.1));
-	lights.push_back(new Light(Vector3(0, 0, 0), Vector3(215, 178, 49), 10.0, 20.0, 0.3));
+	lights.push_back(new Light(Vector3(0, 500.0, 500.0), Vector3(255, 255, 255), 10.0, 500.0, 0.1));
+	lights.push_back(new Light(Vector3(0, 0, 0), Vector3(215, 178, 49), 5.0, 10.0, 0.15));
 
 	
 
@@ -31,5 +31,5 @@ std::vector<Light*> LightManager::getLights() {
 }
 
 void LightManager::updatePlayerLight(Vector3 pos) {
-	lights[1]->position = pos;
+	lights[0]->position = pos;
 }

@@ -16,7 +16,7 @@ void EnemyEntity::render() {
 void EnemyEntity::update(float dt) {
 	float speed = 2.0f;
 	float max_distance = 20.0f;
-	float jumpscare1_dist = 18.0f;
+	float jumpscare1_dist = 10.0f;
 	float jumpscare2_dist = 5.0f;
 	float step_distance = 20.0f;
 

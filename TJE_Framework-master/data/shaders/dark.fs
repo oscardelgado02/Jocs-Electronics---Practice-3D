@@ -27,7 +27,7 @@ void main()
 
 	float distance = length(L);
 
-	float global_intensity = 0.15;
+	float global_intensity = 0.1;
 
 	L/=distance;
 	float atenuation = u_max_distance - distance;
@@ -35,7 +35,7 @@ void main()
 	atenuation = max(atenuation, 0.0);
 	atenuation *= pow(atenuation,2);
 
-	float NdotL = clamp(dot(N,L), 0.0, 1.0);
+	float NdotL = clamp(dot(N,L), 0.0, u_intensity);
 
 	vec3 R = L-2.0*NdotL*N;
 
