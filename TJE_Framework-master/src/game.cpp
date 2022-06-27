@@ -131,7 +131,7 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	//init map
 	//map.loadMap("data/level/level1.txt");
 	levelMap.loadMap("data/level/leveldefinitivo.txt");
-	initGrass();
+	//initGrass();
 	//initSky();
 	
 	//hide the cursor
@@ -183,9 +183,24 @@ void Game::update(double seconds_elapsed)
 		camera->center = Vector3(camera->center.x, camera->center.y + 3.0f, camera->center.z);
 	}
 
+	if (Input::wasKeyPressed(SDL_SCANCODE_SPACE)) { //used to skip intro and tutorial stage
+		if ((int)currentStage < (int)STAGE_ID::PLAY) {
+			int nextStageIndex = (((int)currentStage) + 1);
+			SetStage((STAGE_ID)nextStageIndex, &currentStage);
+		}
+	}
+
+	/*
+	//debug mode
 	if (Input::wasKeyPressed(SDL_SCANCODE_SPACE)) { //used to skip stages
 		int nextStageIndex = (((int)currentStage) + 1);
 		if (nextStageIndex >= stages.size()) must_exit = true; else SetStage((STAGE_ID)nextStageIndex, &currentStage);
+	}
+	*/
+
+	//check if player scaped
+	if (world->checkIfScape()) {
+		SetStage(STAGE_ID::END, &currentStage);
 	}
 
 	//to navigate with the mouse fixed in the middle

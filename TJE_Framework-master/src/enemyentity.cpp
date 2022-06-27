@@ -39,14 +39,17 @@ void EnemyEntity::update(float dt) {
 		sounds[FOOTSTEP_MONSTER]->PlayGameSound();
 	}*/
 
+	//enemy direction to player
+	Vector3 nextStep = Camera::current->eye;
+	Vector3 direction = normalize(nextStep - model.getTranslation());
+	Vector3 nextPos = direction * speed * dt;
+
 	//enemy movement
 	if (!this->checkFrustum() || distanceToCam() > max_distance) {
 		played_sound = false;
-		
-		Vector3 nextStep = Camera::current->eye;
-		Vector3 direction = normalize(nextStep - model.getTranslation());
-		Vector3 nextPos = direction * speed * dt;
-
 		model.translate(nextPos.x, 0.0f, nextPos.z);
 	}
+
+	//enemy rotation
+	
 }

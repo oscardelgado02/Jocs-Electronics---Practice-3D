@@ -22,6 +22,7 @@ void Map::loadEntity(int type, Mesh* mesh, Texture* texture, Vector3 position, V
 	case PLAYER: world->addPlayerEntity("player", model, mesh, texture, shader, Vector4(1, 1, 1, 1)); break;
 	case ENEMY: world->addEnemyEntity("enemy", model, mesh, texture, shader, Vector4(1, 1, 1, 1)); break;
 	case WALL: world->addWallEntity("wall", model, mesh, texture, shader, Vector4(1, 1, 1, 1)); break;
+	case GOAL: world->addWallEntity("goal", model, mesh, texture, shader, Vector4(1, 1, 1, 1)); break;
 	}
 }
 

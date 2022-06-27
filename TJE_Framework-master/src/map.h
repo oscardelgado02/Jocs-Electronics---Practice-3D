@@ -16,6 +16,7 @@
 #define PLAYER 0
 #define ENEMY 1
 #define WALL 2
+#define GOAL 3
 
 class Map
 {

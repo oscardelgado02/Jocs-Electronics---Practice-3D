@@ -34,5 +34,8 @@ public:
 	void deleteAllEntities();
 	int getEntitiesSize();
 	Camera* getPlayerEntityCamera();
+	PlayerEntity* getPlayerEntity();
+	WallEntity* getGoalEntity();
+	bool World::checkIfScape();
 };
 

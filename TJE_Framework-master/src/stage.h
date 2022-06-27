@@ -8,7 +8,8 @@ enum class STAGE_ID {
 	INTRO = 0,
 	TUTORIAL = 1,
 	PLAY = 2,
-	END = 3
+	DEAD = 3,
+	END = 4
 };
 
 class Stage
@@ -60,6 +61,18 @@ public:
 
 	//constructor
 	PlayStage();
+
+	//methods
+	STAGE_ID GetId();
+	void Render();
+	void Update(float dt);
+};
+
+class DeadStage : public Stage {
+public:
+
+	//constructor
+	DeadStage();
 
 	//methods
 	STAGE_ID GetId();

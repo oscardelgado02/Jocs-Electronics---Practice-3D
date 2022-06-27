@@ -32,22 +32,22 @@ void PlayerEntity::update(float dt) {
 
 	//player movement
 	if (Input::isKeyPressed(SDL_SCANCODE_W)) {
-		playerVel = Vector3(0.0f, 0.0f, 1.0f * speed);
+		playerVel = playerVel + Vector3(0.0f, 0.0f, 1.0f * speed);
 		//play footsteps sound
 		status_footsteps = true;
 	}
 	if (Input::isKeyPressed(SDL_SCANCODE_S)) {
-		playerVel = Vector3(0.0f, 0.0f, -1.0f * speed);
+		playerVel = playerVel + Vector3(0.0f, 0.0f, -1.0f * speed);
 		//play footsteps sound
 		status_footsteps = true;
 	}
 	if (Input::isKeyPressed(SDL_SCANCODE_A)) {
-		playerVel = Vector3(1.0f * speed, 0.0f, 0.0f);
+		playerVel = playerVel + Vector3(1.0f * speed, 0.0f, 0.0f);
 		//play footsteps sound
 		status_footsteps = true;
 	}
 	if (Input::isKeyPressed(SDL_SCANCODE_D)) {
-		playerVel = Vector3(-1.0f * speed, 0.0f, 0.0f);
+		playerVel = playerVel + Vector3(-1.0f * speed, 0.0f, 0.0f);
 		//play footsteps sound
 		status_footsteps = true;
 	}
@@ -91,7 +91,7 @@ void PlayerEntity::moveFirstPersonCam(Camera* cam, Vector3 delta) {
 
 float PlayerEntity::runAndCooldown(float dt, float speed) {
 	//async input to move the camera around
-	if (Input::isKeyPressed(SDL_SCANCODE_LSHIFT) && cooldown_enable) {
+	/*if (Input::isKeyPressed(SDL_SCANCODE_LSHIFT) && cooldown_enable) {
 		speed *= 3; //move faster with left shift
 		cooldown -= dt;
 	}
@@ -99,6 +99,11 @@ float PlayerEntity::runAndCooldown(float dt, float speed) {
 		if (cooldown < 5.0f) {
 			cooldown += dt;
 		}
+	}*/
+
+	//debug mode
+	if (Input::isKeyPressed(SDL_SCANCODE_LSHIFT)) {
+		speed *= 10; //move faster with left shift
 	}
 
 	return speed;

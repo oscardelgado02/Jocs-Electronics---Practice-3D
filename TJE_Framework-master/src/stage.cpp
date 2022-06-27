@@ -54,6 +54,22 @@ void PlayStage::Update(float dt) {
 	world->updateEntities(dt);
 }
 
+//DEAD STAGE
+
+DeadStage::DeadStage() {
+
+}
+
+STAGE_ID DeadStage::GetId() { return STAGE_ID::DEAD; }
+
+void DeadStage::Render() {
+	drawText(2, 2, "DEAD", Vector3(g->window_width / 2.0, 1.0, g->window_height / 2.0), 2);
+}
+
+void DeadStage::Update(float dt) {
+
+}
+
 //END STAGE
 
 EndStage::EndStage() {
@@ -73,10 +89,11 @@ void EndStage::Update(float dt) {
 //OTHER METHODS
 
 void InitStages(std::vector<Stage*>* stages) {
-	stages->reserve(4);
+	stages->reserve(5);
 	stages->push_back(new IntroStage());
 	stages->push_back(new TutorialStage());
 	stages->push_back(new PlayStage());
+	stages->push_back(new DeadStage());
 	stages->push_back(new EndStage());
 }
 

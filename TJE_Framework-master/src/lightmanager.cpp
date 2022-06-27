@@ -13,7 +13,7 @@ LightManager::LightManager() {
 }
 
 void LightManager::initLights() {
-	lights.push_back(new Light(Vector3(0, 500.0, 500.0), Vector3(255, 255, 255), 10.0, 500.0, 0.1));
+	lights.push_back(new Light(Vector3(0, 500.0, 500.0), Vector3(255,255,255), 10.0, 1000.0, 0.1)); //medianoche:(65, 81, 98) luna:(247, 225, 195) blood_moon:(212, 48, 54)
 	lights.push_back(new Light(Vector3(0, 0, 0), Vector3(215, 178, 49), 5.0, 10.0, 0.15));
 
 	
@@ -31,5 +31,5 @@ std::vector<Light*> LightManager::getLights() {
 }
 
 void LightManager::updatePlayerLight(Vector3 pos) {
-	lights[0]->position = pos;
+	lights[1]->position = pos;
 }
