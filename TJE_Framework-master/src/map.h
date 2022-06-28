@@ -29,5 +29,6 @@ public:
 	//methods
 	void Map::loadEntity(int type, Mesh* mesh, Texture* texture, Vector3 position, Vector3 rotation, Vector3 scale);
 	void loadMap(char* path);
+	void restartEntities(char* path);
 };
 

@@ -37,8 +37,9 @@ float padding = 2.5f;
 //World instance
 World* world;
 
-//Map variable
+//Map variables
 Map levelMap = Map();
+char* map_path = "data/level/leveldefinitivo.txt";
 
 //Ambience sound
 Sound ambience_sound;
@@ -130,7 +131,7 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 
 	//init map
 	//map.loadMap("data/level/level1.txt");
-	levelMap.loadMap("data/level/leveldefinitivo.txt");
+	levelMap.loadMap(map_path);
 	//initGrass();
 	//initSky();
 	
@@ -183,10 +184,18 @@ void Game::update(double seconds_elapsed)
 		camera->center = Vector3(camera->center.x, camera->center.y + 3.0f, camera->center.z);
 	}
 
-	if (Input::wasKeyPressed(SDL_SCANCODE_SPACE)) { //used to skip intro and tutorial stage
-		if ((int)currentStage < (int)STAGE_ID::PLAY) {
+	if (Input::wasKeyPressed(SDL_SCANCODE_SPACE)) {
+		if ((int)currentStage < (int)STAGE_ID::PLAY) { //used to skip intro and tutorial stage
 			int nextStageIndex = (((int)currentStage) + 1);
 			SetStage((STAGE_ID)nextStageIndex, &currentStage);
+		}
+		if ((int)currentStage == (int)STAGE_ID::DEAD) { //used to restart the level if dead
+			SetStage(STAGE_ID::PLAY, &currentStage);
+			levelMap.restartEntities(map_path);
+			GetStage(stages, currentStage)->camera = world->getPlayerEntityCamera();
+		}
+		if ((int)currentStage == (int)STAGE_ID::END) { //used to close the game if end
+			must_exit = true; BASS_Free();
 		}
 	}
 
@@ -197,12 +206,17 @@ void Game::update(double seconds_elapsed)
 		if (nextStageIndex >= stages.size()) must_exit = true; else SetStage((STAGE_ID)nextStageIndex, &currentStage);
 	}
 	*/
+	
+	//check if player is dead
+	if (world->checkIfDead()) {
+		SetStage(STAGE_ID::DEAD, &currentStage);
+	}
 
 	//check if player scaped
 	if (world->checkIfScape()) {
 		SetStage(STAGE_ID::END, &currentStage);
 	}
-
+	
 	//to navigate with the mouse fixed in the middle
 	if (mouse_locked)
 		Input::centerMouse();

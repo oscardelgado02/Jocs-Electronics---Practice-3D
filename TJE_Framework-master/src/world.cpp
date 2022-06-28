@@ -52,6 +52,8 @@ void World::updateEntities(float dt) {
 	for (int i = 0; i < entities.size(); i++) {
 		entities[i]->update(dt);
 	}
+
+	distanceEnemyToPlayer(); //to calculate enemy distance to player
 }
 
 void World::deleteAllEntities() {
@@ -66,12 +68,7 @@ int World::getEntitiesSize() {
 
 Camera* World::getPlayerEntityCamera() {
 
-	for (int i = 0; i < entities.size(); i++) {
-		if (entities[i]->name.compare("player") == 0) {
-			PlayerEntity* player = (PlayerEntity*)entities[i];
-			return player->getPlayerCamera();
-		}
-	}
+	return getPlayerEntity()->getPlayerCamera();
 }
 
 PlayerEntity* World::getPlayerEntity() {
@@ -84,6 +81,18 @@ PlayerEntity* World::getPlayerEntity() {
 	}
 }
 
+std::vector<Entity*> World::getEnemyEntities() {
+
+	std::vector<Entity*> enemies;
+
+	for (int i = 0; i < entities.size(); i++) {
+		if (entities[i]->name.compare("enemy") == 0) {
+			enemies.push_back((EnemyEntity*)entities[i]);
+			return enemies;
+		}
+	}
+}
+
 WallEntity* World::getGoalEntity() {
 
 	for (int i = 0; i < entities.size(); i++) {
@@ -92,6 +101,34 @@ WallEntity* World::getGoalEntity() {
 			return goal;
 		}
 	}
+}
+
+void World::distanceEnemyToPlayer() {
+	Vector3 playerPos = World::getInstance()->getPlayerEntity()->getPosition();
+	std::vector<Entity*> enemies = getEnemyEntities();
+
+	for (int i = 0; i < enemies.size(); i++) {
+		((EnemyEntity*)enemies[i])->setTargetPlayer(playerPos);
+	}
+}
+
+bool World::checkIfDead() {
+	Vector3 player = getPlayerEntity()->getPosition();
+	bool x_status = false;
+	bool z_status = false;
+
+	float size = 1.5f;
+
+	for (int i = 0; i < entities.size(); i++) {
+		if (entities[i]->name.compare("enemy") == 0) {
+			Vector3 enemy = entities[i]->getPosition();
+			
+			x_status = x_status || ((enemy.x - size < player.x) && (enemy.x + size > player.x));
+			z_status = z_status || ((enemy.z - size < player.z) && (enemy.z + size > player.z));
+		}
+	}
+
+	return x_status && z_status;
 }
 
 bool World::checkIfScape() {
@@ -110,4 +147,20 @@ bool World::checkIfScape() {
 	*/
 
 	return x_status && z_status;
+}
+
+void World::restartEntity(Vector3 position, Vector3 rotation, Vector3 scale, int idx) {
+
+	Matrix44 model;
+
+	model.translate(position.x, position.y, position.z);
+
+	//APPLY ROTATION
+	model.rotate((PI / 180) * rotation.x, Vector3(0, 1, 0)); //rotate in x
+	model.rotate((PI / 180) * rotation.y, Vector3(0, 0, 1)); //rotate in y
+	model.rotate((PI / 180) * rotation.z, Vector3(1, 0, 0)); //rotate in z
+
+	model.scale(10.0f * scale.x, 10.0f * scale.y, 10.0f * scale.z);
+
+	entities[idx]->setModel(model);
 }

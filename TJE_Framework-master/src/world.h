@@ -35,7 +35,11 @@ public:
 	int getEntitiesSize();
 	Camera* getPlayerEntityCamera();
 	PlayerEntity* getPlayerEntity();
+	std::vector<Entity*> World::getEnemyEntities();
 	WallEntity* getGoalEntity();
-	bool World::checkIfScape();
+	void distanceEnemyToPlayer();
+	bool checkIfDead();
+	bool checkIfScape();
+	void restartEntity(Vector3 position, Vector3 rotation, Vector3 scale, int idx);
 };
 

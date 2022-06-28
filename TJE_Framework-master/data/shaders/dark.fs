@@ -35,7 +35,7 @@ void main()
 	atenuation = max(atenuation, 0.0);
 	atenuation *= pow(atenuation,2);
 
-	float NdotL = clamp(dot(N,L), 0.0, u_intensity);
+	float NdotL = clamp(dot(N,L), 0.0, 1.0);
 
 	vec3 R = L-2.0*NdotL*N;
 
