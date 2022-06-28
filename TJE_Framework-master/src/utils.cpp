@@ -471,3 +471,6 @@ char* fetchBufferVec4(char* data, std::vector<Vector4>& vector)
 }
 
 
+float sign(float value) {
+	return value >= 0.0f ? 1.0f : -1.0f;
+}

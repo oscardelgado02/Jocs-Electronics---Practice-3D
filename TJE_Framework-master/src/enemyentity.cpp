@@ -6,7 +6,7 @@ EnemyEntity::EnemyEntity(std::string name, Matrix44 model, Mesh* mesh, Texture* 
 	sounds.push_back(new Sound("data/sounds/sustos/mixkit-horror-impact-773.wav"));
 	//sounds.push_back(new Sound("data/sounds/sustos/mixkit-monster-footstep-1975.wav"));
 	target_player = Vector3(0.0f, 0.0f, 0.0f); //initial value
-	last_direction = Vector3(0.0f, 0.0f, 0.0f);
+	yaw = 0.0f;
 }
 
 EnemyEntity::~EnemyEntity() {}
@@ -63,17 +63,59 @@ void EnemyEntity::movementAndRotation(float dt, float speed) {
 
 	float max_distance = 20.0f;
 	
-	//enemy direction to player
-	Vector3 nextStep = Camera::current->eye;
-	Vector3 direction = normalize(nextStep - model.getTranslation());
-	Vector3 nextPos = direction * speed * dt;
-
 	//enemy movement
 	if (!this->checkFrustum() || distanceToPlayer() > max_distance) {
 		played_sound = false;
-		float direction_delta = (direction.x - last_direction.x) + (direction.z - last_direction.z);
 
-		model.translate(nextPos.x, 0.0f, nextPos.z);
-		model.rotate(direction_delta, Vector3(0.0f, 1.0f, 0.0f));//enemy rotation
+		//enemy direction to player
+		Vector3 side = model.rotateVector(Vector3(1.0, 0.0, 0.0)).normalize();
+		Vector3 forward = model.rotateVector(Vector3(0.0, 0.0, 1.0)).normalize();
+
+		Vector3 direction = target_player - model.getTranslation();
+
+		//model.lookAt(model.getTranslation(), direction, Vector3(0.0,1.0,0.0));
+
+		float sideDot = side.dot(direction);
+		float forwardDot = forward.dot(direction);
+
+		yaw = sign(sideDot) * dt;
+
+		model.rotate(yaw, Vector3(0.0, -1.0, 0.0));
+
+		Vector3 nextPos = forward * speed * dt;
+
+		model.translateGlobal(nextPos.x, 0.0f, nextPos.z);
 	}
 }
+
+/*
+//para que baile danza kuduro el personaje
+void EnemyEntity::movementAndRotation(float dt, float speed) {
+
+	float max_distance = 20.0f;
+
+	//enemy movement
+	if (this->checkFrustum() || distanceToPlayer() > max_distance) {
+		played_sound = false;
+
+		//enemy direction to player
+		Vector3 side = model.rotateVector(Vector3(1.0, 0.0, 0.0)).normalize();
+		Vector3 forward = model.rotateVector(Vector3(0.0, 0.0, -1.0)).normalize();
+
+		Vector3 direction = target_player - model.getTranslation();
+
+		//model.lookAt(model.getTranslation(), direction, Vector3(0.0,1.0,0.0));
+
+		float sideDot = side.dot(direction);
+		float forwardDot = forward.dot(direction);
+
+		if (forwardDot < 0.90f) yaw += sign(sideDot) * dt;
+
+		model.rotate(yaw, Vector3(0.0, -1.0, 0.0));
+
+		Vector3 nextPos = forward * speed * dt;
+
+		//model.translate(nextPos.x, 0.0f, nextPos.z);
+	}
+}
+*/
