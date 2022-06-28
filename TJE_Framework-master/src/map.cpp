@@ -37,8 +37,7 @@ void Map::loadMap(char* path) {
 
 		int type = stoi(line[TYPE]);
 		Mesh* mesh = Mesh::Get(line[MESH].c_str());
-		Texture* text = new Texture();
-		text->load(line[TEXTURE].c_str());
+		Texture* text = Texture::Get(line[TEXTURE].c_str());
 		
 		//Position
 		std::vector<std::string> position_str = split(line[POSITION], ',');

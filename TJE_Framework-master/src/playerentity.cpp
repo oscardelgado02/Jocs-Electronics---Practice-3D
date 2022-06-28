@@ -6,8 +6,8 @@
 PlayerEntity::PlayerEntity(std::string name, Matrix44 model, Mesh* mesh, Texture* texture, Shader* shader, Vector4 color) : EntityMesh(name, model, mesh, texture, shader, color) {
 	cooldown = 3.0f;
 	cooldown_enable = true;
-	footsteps = Sound("data/sounds/footsteps/mixkit-footsteps-in-woods-loop-533.wav", false);
-	exhale = Sound("data/sounds/exhale.wav", false);
+	footsteps = Sound("data/sounds/footsteps/steps.wav");
+	exhale = Sound("data/sounds/exhale.wav");
 }
 
 PlayerEntity::~PlayerEntity(){}

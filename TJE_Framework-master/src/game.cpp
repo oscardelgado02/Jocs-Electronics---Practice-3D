@@ -271,7 +271,14 @@ void Game::onResize(int width, int height)
 {
     std::cout << "window resized: " << width << "," << height << std::endl;
 	glViewport( 0,0, width, height );
-	camera->aspect =  width / (float)height;
+	
+	//camera->aspect =  width / (float)height;
+
+	//resize all cameras
+	for (int i = 0; i < stages.size(); i++) {
+		stages[i]->camera->aspect = width / (float)height;
+	}
+
 	window_width = width;
 	window_height = height;
 }
