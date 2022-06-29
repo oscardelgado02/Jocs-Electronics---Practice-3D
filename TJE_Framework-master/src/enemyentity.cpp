@@ -25,8 +25,8 @@ void EnemyEntity::render() {
 		shader->enable();
 
 		//multipass
+		anim->assignTime(Game::instance->time);
 		multiPass(lights, camera);
-		anim->skeleton.renderSkeleton(camera, model);	
 
 		//disable shader
 		shader->disable();
@@ -37,8 +37,6 @@ void EnemyEntity::update(float dt) {
 	float speed = 2.0f;
 
 	//Vector3 nextStep = ia.sendStep(model.getTranslation());
-
-	anim->assignTime(dt);
 
 	movementAndRotation(dt, speed);
 	playSounds();
@@ -160,7 +158,7 @@ void EnemyEntity::multiPass(std::vector<Light*> lights, Camera* camera) {
 		setUniforms(lights[i], camera);
 
 		//do the draw call
-		mesh->renderAnimated(GL_TRIANGLES, &(anim->skeleton));
+		mesh->renderAnimated(GL_TRIANGLES, &anim->skeleton);
 	}
 
 	glDisable(GL_BLEND);
