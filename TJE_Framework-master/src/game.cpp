@@ -136,8 +136,7 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	//initGrass();
 	//initSky();
 
-	Matrix44 model;
-	world->addEnemyEntity("enemy", model, Mesh::Get("data/animaciones/mibrujita.mesh"), grasstexture, shader, Vector4(1, 1, 1, 1));
+	//world->addEnemyEntity("enemy", Matrix44(), Mesh::Get("data/animaciones/bulin47.mesh"), grasstexture, shader, Vector4(1, 1, 1, 1));
 
 	//hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse

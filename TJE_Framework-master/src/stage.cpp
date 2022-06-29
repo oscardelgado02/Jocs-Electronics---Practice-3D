@@ -14,8 +14,20 @@ IntroStage::IntroStage() {
 STAGE_ID IntroStage::GetId() { return STAGE_ID::INTRO; }
 
 void IntroStage::Render() {
-	drawText(2, 2, "PRESS SPACE TO START", Vector3(g->window_width / 2.0, 1.0, g->window_height / 2.0), 2);
 	world->renderEntities();
+
+	std::string text = "Stalkers";
+
+	for (int i = 0; i < 2; i++) {
+		if(i==1) text = "PRESS SPACE TO START";
+
+		float size = 16/(i*2+1);
+		float scalated_size = (g->window_width * size / (1000.0));
+		int screen_adjust = 2.8 * text.size() * scalated_size;
+		int offset = 30 * scalated_size * i;
+
+		drawText((g->window_width / 2.0) - (screen_adjust), (g->window_height / 3.0) + offset, text, Vector3(1, 1, 1), scalated_size);
+	}
 }
 
 void IntroStage::Update(float dt) {
@@ -24,13 +36,28 @@ void IntroStage::Update(float dt) {
 
 //TUTORIAL STAGE
 
-TutorialStage::TutorialStage(){
-}
+TutorialStage::TutorialStage(){}
 
 STAGE_ID TutorialStage::GetId() { return STAGE_ID::TUTORIAL; }
 
 void TutorialStage::Render() {
-	drawText(2, 2, "TUTORIAL", Vector3(g->window_width / 2.0, 1.0, g->window_height / 2.0), 2);
+	std::string text = "It is the year 1203 and you heard rumours about and old village where strange things happen.";
+
+	for (int i = 0; i < 8; i++) {
+		if (i == 1) text = "The last villager reported time ago that there were \"things\" that stalked villagers in the shadows...";
+		if (i == 2) text = "And that some people have disappeared...";
+		if (i == 3) text = "You decide to investigate the village, but when you enter, the gate closes behind you.";
+		if (i == 4) text = "You need to find another gate to escape from there.";
+		if (i == 5) text = "And remember: the villager also said that those things stalked at the distance,";
+		if (i == 6) text = "and that when they were close, they waited until you didn't look at them to chase you.";
+		if (i == 7) text = "PRESS SPACE TO CONTINUE";
+
+		float size = 1.7;
+		float scalated_size = (g->window_width * size / (1000.0));
+		int screen_adjust = 2.8 * text.size() * scalated_size;
+		int offset = 30 * scalated_size * i;
+		drawText((g->window_width / 2.0) - (screen_adjust), (g->window_height / 6.0) + offset, text, Vector3(1, 1, 1), scalated_size);
+	}
 }
 
 void TutorialStage::Update(float dt) {}

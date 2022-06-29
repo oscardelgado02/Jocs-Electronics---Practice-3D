@@ -7,7 +7,7 @@ EnemyEntity::EnemyEntity(std::string name, Matrix44 model, Mesh* mesh, Texture* 
 	//sounds.push_back(new Sound("data/sounds/sustos/mixkit-monster-footstep-1975.wav"));
 	target_player = Vector3(0.0f, 0.0f, 0.0f); //initial value
 	yaw = 0.0f;
-	anim = Animation::Get("data/animaciones/mibrujita.skanim");
+	anim = Animation::Get("data/animaciones/bulin47.skanim");
 }
 
 EnemyEntity::~EnemyEntity() {}
@@ -27,6 +27,7 @@ void EnemyEntity::render() {
 		//multipass
 		anim->assignTime(Game::instance->time);
 		multiPass(lights, camera);
+		anim->skeleton.renderSkeleton(camera, model);
 
 		//disable shader
 		shader->disable();
