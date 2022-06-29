@@ -21,7 +21,7 @@ void PlayerEntity::update(float dt) {
 	Vector3 playerVel = Vector3(0.0f, 0.0f, 0.0f);
 	bool status_footsteps = false; //control footsteps sound
 
-	Camera* cam = Game::instance->camera;
+	Camera* cam = Camera::current;
 
 	//mouse input to rotate the cam
 	model.rotate(Input::mouse_delta.x * 0.002f, Vector3(0.0f, -1.0f, 0.0f));
@@ -53,9 +53,9 @@ void PlayerEntity::update(float dt) {
 	}
 
 	playSounds(status_footsteps);
-	detectPlayerCollision(cam, dt, playerVel);
-	//detectPlayerCollision2(cam, dt, playerVel, speed);
-	moveFirstPersonCam(cam, playerVel);
+
+	Vector3 nextPos = detectPlayerCollision(dt, playerVel);
+	movePlayer(nextPos);
 
 	//update lantern position
 	LightManager::getInstance()->updatePlayerLight(this->model.getTranslation() + Vector3(0.0,0.9,0.0));
@@ -67,26 +67,19 @@ void PlayerEntity::update(float dt) {
 	*/
 }
 
-void PlayerEntity::moveFirstPersonCam(Camera* cam, Vector3 delta) {
+void PlayerEntity::movePlayer(Vector3 nextPos) {
 
-	//cam Vector3
-	Vector3 localDelta = cam->getLocalVector(delta);
-
-	//change eye coordinates
-	cam->eye.x = cam->eye.x - localDelta.x;
-	cam->eye.z = cam->eye.z - localDelta.z;
-
-	//change center coordinates
-	cam->center.x = cam->center.x - localDelta.x;
-	cam->center.z = cam->center.z - localDelta.z;
-
-	//world coordinates cam Vector3
-	Vector3 modelCoordinates = Vector3(-localDelta.x, 0.0f, -localDelta.z);
+	Camera* cam = Camera::current;
+	Vector3 playerPos = model.getTranslation();
+	
+	Vector3 movement = nextPos - playerPos;
+	movement.y = 0.0f;
 
 	//change model coordinates
-	this->model.translateGlobal(modelCoordinates.x, 0.0f, modelCoordinates.z);
-
+	this->model.translateGlobal(movement.x, 0.0f, movement.z);
 	cam->updateViewMatrix();
+	cam->eye = cam->eye + movement;
+	cam->center = cam->center + movement;
 }
 
 float PlayerEntity::runAndCooldown(float dt, float speed) {
@@ -129,72 +122,16 @@ void PlayerEntity::playSounds(bool status_footsteps) {
 	}
 }
 
-void PlayerEntity::detectPlayerCollision(Camera* cam, float dt, Vector3 playerVel) {
+Vector3 PlayerEntity::detectPlayerCollision(float dt, Vector3 playerVel) {
 
+	Camera* cam = Camera::current;
 	World* world = World::getInstance();
 	Vector3 playerPos = model.getTranslation();
-	Vector3 nextPos = playerPos + playerVel;
+	Vector3 localDelta = cam->getLocalVector(playerVel);
+	localDelta.y = 0;
 
-	//calculamos el centro de la esfera de colisión del player elevandola hasta la cintura
-	Vector3 character_center = nextPos + Vector3(0, 0.6f, 0);
-
-	//para cada objecto de la escena...
-
-	for (size_t i = 0; i < world->getEntitiesSize(); i++) {
-		
-		Entity* currentEntity = world->getEntity(i);
-		EntityMesh* entityMesh = (EntityMesh*) currentEntity;
-
-		Vector3 coll;
-		Vector3 collnorm;
-
-		if (currentEntity->name.compare("player") == 0) {
-			continue;
-		}
-
-		//comprobamos si colisiona el objeto con la esfera (radio 3)
-		if ((entityMesh->mesh->testSphereCollision(entityMesh->model, character_center, 0.5f, coll, collnorm)) == false)
-			continue; //si no colisiona, pasamos al siguiente objeto
-
-			//si la esfera está colisionando muevela a su posicion anterior alejandola del objeto
-		Vector3 push_away = normalize(coll - character_center) * playerVel;
-		nextPos = playerPos - push_away; //move to previous pos but a little bit further
-
-		//cuidado con la Y, si nuestro juego es 2D la ponemos a 0
-		nextPos.y = 0;
-
-		//reflejamos el vector velocidad para que de la sensacion de que rebota en la pared
-		//velocity = reflect(velocity, collnorm) * 0.95;
-
-		//change eye coordinates
-		cam->eye.x = cam->eye.x - push_away.x;
-		cam->eye.z = cam->eye.z - push_away.z;
-
-		//change center coordinates
-		cam->center.x = cam->center.x - push_away.x;
-		cam->center.z = cam->center.z - push_away.z;
-
-		//world coordinates cam Vector3
-		Vector3 modelCoordinates = Vector3(-push_away.x, 0.0f, -push_away.z);
-
-		//change model coordinates
-		this->model.translateGlobal(modelCoordinates.x, 0.0f, modelCoordinates.z);
-
-		cam->updateViewMatrix();
-	}
-}
-
-void PlayerEntity::detectPlayerCollision2(Camera* cam, float dt, Vector3 playerVel, float speed) {
-
-	World* world = World::getInstance();
-	Vector3 playerPos = model.getTranslation();
-	Vector3 nextPos = playerPos + (playerVel);
-
-	//calculamos el centro de la esfera de colisión del player elevandola hasta la cintura
-	Vector3 character_center = nextPos + Vector3(0, 0.95f, 0);
-	Vector3 character_center_current = playerPos + Vector3(0, 0.95f, 0);
-
-	//para cada objecto de la escena...
+	Vector3 nextPos = playerPos - localDelta;
+	Vector3 character_center = nextPos + Vector3(0, 0.65f, 0);
 
 	for (size_t i = 0; i < world->getEntitiesSize(); i++) {
 
@@ -209,35 +146,18 @@ void PlayerEntity::detectPlayerCollision2(Camera* cam, float dt, Vector3 playerV
 		}
 
 		//comprobamos si colisiona el objeto con la esfera (radio 3)
-		if (!(entityMesh->mesh->testSphereCollision(entityMesh->model, character_center_current, 0.5f, coll, collnorm)) || !(entityMesh->mesh->testSphereCollision(entityMesh->model, character_center, 0.5f, coll, collnorm)))
+		if (!entityMesh->mesh->testSphereCollision(entityMesh->model, character_center, 0.2f, coll, collnorm))
 			continue; //si no colisiona, pasamos al siguiente objeto
 
-			//si la esfera está colisionando muevela a su posicion anterior alejandola del objeto
-		Vector3 push_away = normalize(coll - character_center) * playerVel;
+		//si la esfera está colisionando muevela a su posicion anterior alejandola del objeto
+		Vector3 push_away = normalize(coll - character_center) * dt * 10.0f;
 		nextPos = playerPos - push_away; //move to previous pos but a little bit further
 
 		//cuidado con la Y, si nuestro juego es 2D la ponemos a 0
 		nextPos.y = 0;
-
-		//reflejamos el vector velocidad para que de la sensacion de que rebota en la pared
-		//velocity = reflect(velocity, collnorm) * 0.95;
-
-		//change eye coordinates
-		cam->eye.x = cam->eye.x - push_away.x;
-		cam->eye.z = cam->eye.z - push_away.z;
-
-		//change center coordinates
-		cam->center.x = cam->center.x - push_away.x;
-		cam->center.z = cam->center.z - push_away.z;
-
-		//world coordinates cam Vector3
-		Vector3 modelCoordinates = Vector3(-push_away.x, 0.0f, -push_away.z);
-
-		//change model coordinates
-		this->model.translateGlobal(modelCoordinates.x, 0.0f, modelCoordinates.z);
-
-		cam->updateViewMatrix();
 	}
+
+	return nextPos;
 }
 
 Camera* PlayerEntity::getPlayerCamera() {

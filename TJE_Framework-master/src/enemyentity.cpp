@@ -4,7 +4,6 @@ EnemyEntity::EnemyEntity(std::string name, Matrix44 model, Mesh* mesh, Texture* 
 	played_sound = false;
 	sounds.push_back(new Sound("data/sounds/sustos/mixkit-cinematic-horror-trailer-long-sweep-561.wav"));
 	sounds.push_back(new Sound("data/sounds/sustos/mixkit-horror-impact-773.wav"));
-	//sounds.push_back(new Sound("data/sounds/sustos/mixkit-monster-footstep-1975.wav"));
 	target_player = Vector3(0.0f, 0.0f, 0.0f); //initial value
 	yaw = 0.0f;
 	anim = Animation::Get("data/animaciones/bulin47.skanim");

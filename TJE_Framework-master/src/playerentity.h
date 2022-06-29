@@ -18,11 +18,10 @@ public:
     //methods overwritten 
     void render();
     void update(float dt);
-    void moveFirstPersonCam(Camera* cam, Vector3 position);
+    void movePlayer(Vector3 nextPos);
     float runAndCooldown(float dt, float speed);
     void playSounds(bool status_footsteps);
-    void detectPlayerCollision(Camera* cam, float dt, Vector3 playerVel);
-    void detectPlayerCollision2(Camera* cam, float dt, Vector3 playerVel, float speed);
+    Vector3 detectPlayerCollision(float dt, Vector3 playerVel);
     Camera* getPlayerCamera();
 };
 

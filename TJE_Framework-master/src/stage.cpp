@@ -19,11 +19,11 @@ void IntroStage::Render() {
 	std::string text = "Stalkers";
 
 	for (int i = 0; i < 2; i++) {
-		if(i==1) text = "PRESS SPACE TO START";
+		if (i == 1) text = "PRESS SPACE TO START";
 
 		float size = 16/(i*2+1);
 		float scalated_size = (g->window_width * size / (1000.0));
-		int screen_adjust = 2.8 * text.size() * scalated_size;
+		int screen_adjust = 3.0 * text.size() * scalated_size;
 		int offset = 30 * scalated_size * i;
 
 		drawText((g->window_width / 2.0) - (screen_adjust), (g->window_height / 3.0) + offset, text, Vector3(1, 1, 1), scalated_size);
@@ -54,7 +54,7 @@ void TutorialStage::Render() {
 
 		float size = 1.7;
 		float scalated_size = (g->window_width * size / (1000.0));
-		int screen_adjust = 2.8 * text.size() * scalated_size;
+		int screen_adjust = 2.7 * text.size() * scalated_size;
 		int offset = 30 * scalated_size * i;
 		drawText((g->window_width / 2.0) - (screen_adjust), (g->window_height / 6.0) + offset, text, Vector3(1, 1, 1), scalated_size);
 	}
@@ -83,14 +83,24 @@ void PlayStage::Update(float dt) {
 
 //DEAD STAGE
 
-DeadStage::DeadStage() {
-
-}
+DeadStage::DeadStage() {}
 
 STAGE_ID DeadStage::GetId() { return STAGE_ID::DEAD; }
 
 void DeadStage::Render() {
-	drawText(2, 2, "DEAD", Vector3(g->window_width / 2.0, 1.0, g->window_height / 2.0), 2);
+	std::string text = "YOU DIED";
+	Vector3 color = Vector3(1, 0, 0);
+
+	for (int i = 0; i < 2; i++) {
+		if (i == 1) text = "PRESS SPACE TO RESTART"; color = Vector3(1, 1, 1);
+
+		float size = 8 / (i * 2 + 1);
+		float scalated_size = (g->window_width * size / (1000.0));
+		int screen_adjust = 3.0 * text.size() * scalated_size;
+		int offset = 30 * scalated_size * i;
+
+		drawText((g->window_width / 2.0) - (screen_adjust), (g->window_height / 2.0) + offset, text, color, scalated_size);
+	}
 }
 
 void DeadStage::Update(float dt) {

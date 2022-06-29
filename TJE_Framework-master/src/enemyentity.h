@@ -2,7 +2,6 @@
 
 #define JUMPSCARE1 0
 #define JUMPSCARE2 1
-#define FOOTSTEP_MONSTER 2
 
 #include "entitymesh.h"
 #include "ia.h"
