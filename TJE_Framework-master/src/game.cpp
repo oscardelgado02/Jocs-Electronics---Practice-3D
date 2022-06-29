@@ -19,7 +19,6 @@
 Mesh* mesh = NULL;
 Texture* texture = NULL;
 Shader* shader = NULL;
-Animation* anim = NULL;
 float angle = 0;
 float mouse_speed = 20.0f;
 FBO* fbo = NULL;
@@ -33,6 +32,8 @@ const int grass_height1 = 15;
 const int grass_height2 = 24;
 const int grass_height3 = 30;
 float padding = 2.5f;
+
+Mesh* brujimesh = NULL;
 
 //World instance
 World* world;
@@ -134,7 +135,10 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	levelMap.loadMap(map_path);
 	//initGrass();
 	//initSky();
-	
+
+	Matrix44 model;
+	world->addEnemyEntity("enemy", model, Mesh::Get("data/animaciones/mibrujita.mesh"), grasstexture, shader, Vector4(1, 1, 1, 1));
+
 	//hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
 
@@ -179,6 +183,7 @@ void Game::render(void)
 
 void Game::update(double seconds_elapsed)
 {
+
 	if (Input::isKeyPressed(SDL_SCANCODE_P)) {
 		camera->eye = Vector3(camera->eye.x, camera->eye.y + 3.0f, camera->eye.z);
 		camera->center = Vector3(camera->center.x, camera->center.y + 3.0f, camera->center.z);

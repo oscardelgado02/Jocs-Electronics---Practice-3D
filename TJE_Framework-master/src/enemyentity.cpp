@@ -7,18 +7,38 @@ EnemyEntity::EnemyEntity(std::string name, Matrix44 model, Mesh* mesh, Texture* 
 	//sounds.push_back(new Sound("data/sounds/sustos/mixkit-monster-footstep-1975.wav"));
 	target_player = Vector3(0.0f, 0.0f, 0.0f); //initial value
 	yaw = 0.0f;
+	anim = Animation::Get("data/animaciones/mibrujita.skanim");
 }
 
 EnemyEntity::~EnemyEntity() {}
 
 void EnemyEntity::render() {
-	EntityMesh::render();
+	//get the last camera that was activated
+	Camera* camera = Camera::current;
+	Matrix44 model = this->model;
+	std::vector<Light*> lights = LightManager::getInstance()->getLights();
+
+
+	if (shader && checkFrustum())
+	{
+		//enable shader
+		shader->enable();
+
+		//multipass
+		multiPass(lights, camera);
+		anim->skeleton.renderSkeleton(camera, model);	
+
+		//disable shader
+		shader->disable();
+	}
 }
 
 void EnemyEntity::update(float dt) {
 	float speed = 2.0f;
 
 	//Vector3 nextStep = ia.sendStep(model.getTranslation());
+
+	anim->assignTime(dt);
 
 	movementAndRotation(dt, speed);
 	playSounds();
@@ -119,3 +139,31 @@ void EnemyEntity::movementAndRotation(float dt, float speed) {
 	}
 }
 */
+
+void EnemyEntity::multiPass(std::vector<Light*> lights, Camera* camera) {
+	//allow to render pixels that have the same depth as the one in the depth buffer
+	glDepthFunc(GL_LEQUAL);
+
+	//set blending mode to additive
+	//this will collide with materials with blend...
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+
+	for (int i = 0; i < lights.size(); ++i)
+	{
+		//first pass doesn't use blending
+		if (i == 0)
+			glDisable(GL_BLEND);
+		else
+			glEnable(GL_BLEND);
+
+		//pass the light data to the shader
+		setUniforms(lights[i], camera);
+
+		//do the draw call
+		mesh->renderAnimated(GL_TRIANGLES, &(anim->skeleton));
+	}
+
+	glDisable(GL_BLEND);
+	glDepthFunc(GL_LESS); //as default
+
+}

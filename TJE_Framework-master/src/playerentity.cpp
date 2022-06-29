@@ -91,7 +91,7 @@ void PlayerEntity::moveFirstPersonCam(Camera* cam, Vector3 delta) {
 
 float PlayerEntity::runAndCooldown(float dt, float speed) {
 	//async input to move the camera around
-	if (Input::isKeyPressed(SDL_SCANCODE_LSHIFT) && cooldown_enable) {
+	/*if (Input::isKeyPressed(SDL_SCANCODE_LSHIFT) && cooldown_enable) {
 		speed *= 3; //move faster with left shift
 		cooldown -= dt;
 	}
@@ -100,12 +100,12 @@ float PlayerEntity::runAndCooldown(float dt, float speed) {
 			cooldown += dt;
 		}
 	}
-	/*
+	*/
 	//debug mode
 	if (Input::isKeyPressed(SDL_SCANCODE_LSHIFT)) {
 		speed *= 10; //move faster with left shift
 	}
-	*/
+	
 	return speed;
 }
 

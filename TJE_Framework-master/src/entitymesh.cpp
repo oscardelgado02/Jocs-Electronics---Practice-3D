@@ -105,3 +105,4 @@ void EntityMesh::multiPass(std::vector<Light*> lights, Camera* camera) {
 	glDepthFunc(GL_LESS); //as default
 
 }
+
