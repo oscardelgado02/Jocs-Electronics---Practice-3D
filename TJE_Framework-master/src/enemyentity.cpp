@@ -5,6 +5,7 @@ EnemyEntity::EnemyEntity(std::string name, Matrix44 model, Mesh* mesh, Texture* 
 	target_player = Vector3(0.0f, 0.0f, 0.0f); //initial value
 	yaw = 0.0f;
 	anim = Animation::Get("data/animaciones/ZombieIdle1.skanim");
+	anim_distance = 20.0f;
 }
 
 EnemyEntity::~EnemyEntity() {}
@@ -35,6 +36,13 @@ void EnemyEntity::update(float dt) {
 	float speed = 2.0f;
 
 	//Vector3 nextStep = ia.sendStep(model.getTranslation());
+
+	if (!this->checkFrustum() || distanceToPlayer() > anim_distance) {
+		anim = Animation::Get("data/animaciones/ZombieIdle1.skanim");
+	}
+	else {
+		anim = Animation::Get("data/animaciones/finalzombi.skanim");
+	}
 
 	movementAndRotation(dt, speed);
 	playSounds();

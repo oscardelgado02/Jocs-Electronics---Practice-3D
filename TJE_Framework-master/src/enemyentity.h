@@ -11,6 +11,7 @@ class EnemyEntity : public EntityMesh
 public:
     bool played_sound; Vector3 target_player;
     float yaw; Animation* anim = NULL;
+    float anim_distance;
 
     //constructor
     EnemyEntity(std::string name, Matrix44 model, Mesh* mesh, Texture* texture, Shader* shader, Vector4 color);
