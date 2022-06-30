@@ -4,7 +4,7 @@ EnemyEntity::EnemyEntity(std::string name, Matrix44 model, Mesh* mesh, Texture* 
 	played_sound = false;
 	target_player = Vector3(0.0f, 0.0f, 0.0f); //initial value
 	yaw = 0.0f;
-	anim = Animation::Get("data/animaciones/finalzombi.skanim");
+	anim = Animation::Get("data/animaciones/ZombieIdle1.skanim");
 }
 
 EnemyEntity::~EnemyEntity() {}

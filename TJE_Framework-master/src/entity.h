@@ -19,6 +19,7 @@ public:
     virtual void update(float elapsed_time) {};
 
     //some useful methods...
+    std::string getName();
     Vector3 getPosition();
     void setModel(Matrix44 model);
     float distanceToCam();

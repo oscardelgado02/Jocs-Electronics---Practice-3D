@@ -112,6 +112,9 @@ void DeadStage::Render() {
 }
 
 void DeadStage::Update(float dt) {
+	if (g->camera != world->getKillerCam()) {
+		Sound::getInstance()->PlayGameSound(JUMPSCARE2); //se reproduce una sola vez antes de cambiar de cámara
+	}
 	g->camera = world->getKillerCam();
 }
 

@@ -5,6 +5,10 @@ Entity::Entity(std::string name, Matrix44 model) {
 	this->model = model;
 }
 
+std::string Entity::getName() {
+	return name;
+}
+
 Vector3 Entity::getPosition() {
 	return model.getTranslation();
 }
