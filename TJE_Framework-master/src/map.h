@@ -19,7 +19,8 @@
 #define GOAL 3
 #define BRIDGE 4
 #define INVISIBLE_WALL 5
-#define NPC 6
+#define GEISHA 6
+#define NINJA 7
 
 class Map
 {
