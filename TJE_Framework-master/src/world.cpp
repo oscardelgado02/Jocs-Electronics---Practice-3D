@@ -40,6 +40,10 @@ void World::addWallEntity(std::string name, Matrix44 model, Mesh* mesh, Texture*
 	entities.push_back(new WallEntity(name, model, mesh, texture, shader, color));
 }
 
+void World::addAnimatedEntity(std::string name, Matrix44 model, Mesh* mesh, Texture* texture, Shader* shader, Vector4 color, Mesh* animated_mesh, Animation* idle_animation) {
+	entities.push_back(new AnimatedEntity(name, model, mesh, texture, shader, color, animated_mesh, idle_animation));
+}
+
 void World::renderEntities() {
 	
 	for (int i = 0; i < entities.size(); i++) {
@@ -88,9 +92,9 @@ std::vector<Entity*> World::getEnemyEntities() {
 	for (int i = 0; i < entities.size(); i++) {
 		if (entities[i]->name.compare("enemy") == 0) {
 			enemies.push_back((EnemyEntity*)entities[i]);
-			return enemies;
 		}
 	}
+	return enemies;
 }
 
 WallEntity* World::getGoalEntity() {
@@ -142,18 +146,16 @@ Camera* World::getKillerCam() {
 	std::vector<Entity*> enemies = getEnemyEntities();
 
 	//variables to check and save the nearest enemy
-	Vector3 nearest_enemy = Vector3(0.0,0.0,0.0);
+	Vector3 nearest_enemy = Vector3(10000.0,10000.0,10000.0);
 	Vector3 forward = Vector3(0.0,0.0,1.0); //where the enemy is watching
-	float distance = 10000.0f;
 
 	for (int i = 0; i < enemies.size(); i++) {
 
 		Vector3 enemy = enemies[i]->getPosition();
-		forward = enemies[i]->model.rotateVector(Vector3(0.0, 0.0, 1.0)).normalize()*dist_factor;
 
-		if (distance > nearest_enemy.distance(player)) {
-			distance = nearest_enemy.distance(player);
+		if (enemy.distance(player) < nearest_enemy.distance(player)) {
 			nearest_enemy = enemy;
+			forward = enemies[i]->model.rotateVector(Vector3(0.0, 0.0, 1.0)).normalize() * dist_factor;
 		}
 	}
 

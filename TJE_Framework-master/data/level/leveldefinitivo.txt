@@ -1,5 +1,10 @@
 0 data/Character_Ninja_Black_14.obj data/texture_samurai.tga 0.000,0.000,1.500 0.000,0.000,0.000 0.100,0.100,0.100 0 0
 1 data/monster/zombie.obj data/monster/zomtex/diffuse.png 0.000,0.000,-10.000 0.000,0.000,0.000 0.1015,0.1015,0.1015 0
+1 data/monster/zombie.obj data/monster/zomtex/diffuse.png 2.850,0.000,-10.000 0.000,0.000,0.000 0.1015,0.1015,0.1015 0
+1 data/monster/zombie.obj data/monster/zomtex/diffuse.png -2.850,0.000,-10.000 0.000,0.000,0.000 0.1015,0.1015,0.1015 0
+1 data/monster/zombie.obj data/monster/zomtex/diffuse.png -3.500,0.000,-17.000 0.000,0.000,0.000 0.1015,0.1015,0.1015 0
+1 data/monster/zombie.obj data/monster/zomtex/diffuse.png 3.500,0.000,-17.000 0.000,0.000,0.000 0.1015,0.1015,0.1015 0
+6 data/Character_Geisha_White_18.obj data/PolygonSamurai_Tex_01.png -3.500,0.000,1.000 30.000,0.000,0.000 0.100,0.100,0.100 0
 3 data/gate-japan_15.obj data/textures/color-atlas-new.png 0.000,0.200,-19.750 0.000,0.000,0.000 0.050,0.100,0.050 0 0 
 4 data/bridge-japan_4.obj data/textures/color-atlas-new.png 2.850,-0.200,-10.000 90.000,0.000,0.000 0.100,0.100,0.100 0 0 
 4 data/bridge-japan_4.obj data/textures/color-atlas-new.png 0.000,-0.200,-10.000 -90.000,0.000,0.000 0.100,0.100,0.100 0 0 

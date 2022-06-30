@@ -90,8 +90,8 @@ float PlayerEntity::runAndCooldown(float dt, float speed) {
 		if (cooldown < 5.0f) {
 			cooldown += dt;
 		}
-	}
-	*/
+	}*/
+
 	//debug mode
 	if (Input::isKeyPressed(SDL_SCANCODE_LSHIFT)) {
 		speed *= 10; //move faster with left shift

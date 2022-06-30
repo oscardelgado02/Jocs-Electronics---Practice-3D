@@ -19,6 +19,7 @@
 #define GOAL 3
 #define BRIDGE 4
 #define INVISIBLE_WALL 5
+#define NPC 6
 
 class Map
 {

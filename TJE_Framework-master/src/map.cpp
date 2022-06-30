@@ -25,6 +25,7 @@ void Map::loadEntity(int type, Mesh* mesh, Texture* texture, Vector3 position, V
 	case GOAL: world->addWallEntity("goal", model, mesh, texture, shader, Vector4(1, 1, 1, 1)); break;
 	case BRIDGE: world->addWallEntity("bridge", model, mesh, texture, shader, Vector4(1, 1, 1, 1)); break;
 	case INVISIBLE_WALL: world->addWallEntity("invisible_wall", model, mesh, texture, shader, Vector4(1, 1, 1, 1)); break;
+	case NPC: world->addAnimatedEntity("NPC", model, mesh, texture, Shader::Get("data/shaders/skinning.vs", "data/shaders/dark.fs"), Vector4(1, 1, 1, 1), Mesh::Get("data/animaciones/geishaDance.mesh"), Animation::Get("data/animaciones/geishaDance.skanim")); break;
 	}
 }
 
