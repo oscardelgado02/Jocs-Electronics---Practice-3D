@@ -14,9 +14,11 @@ IntroStage::IntroStage() {
 STAGE_ID IntroStage::GetId() { return STAGE_ID::INTRO; }
 
 void IntroStage::Render() {
+	//render entities
 	world->renderEntities();
 
-	std::string text = "Stalkers";
+	//text
+	std::string text = "STALKERS";
 	Vector3 color = Vector3(0.6, 0, 0); //first sentence color
 
 	for (int i = 0; i < 2; i++) {
@@ -42,6 +44,7 @@ TutorialStage::TutorialStage(){}
 STAGE_ID TutorialStage::GetId() { return STAGE_ID::TUTORIAL; }
 
 void TutorialStage::Render() {
+	//text
 	std::string text = "It is the year 1203 and you heard rumours about and old village where strange things happen.";
 	Vector3 color = Vector3(1, 1, 1); //first sentence color
 
@@ -90,6 +93,9 @@ DeadStage::DeadStage() {}
 STAGE_ID DeadStage::GetId() { return STAGE_ID::DEAD; }
 
 void DeadStage::Render() {
+	//render entities
+	world->renderEntities();
+	//text
 	std::string text = "YOU DIED";
 	Vector3 color = Vector3(0.6, 0, 0); //first sentence color
 
@@ -101,12 +107,12 @@ void DeadStage::Render() {
 		int screen_adjust = 3.0 * text.size() * scalated_size;
 		int offset = 30 * scalated_size * i;
 
-		drawText((g->window_width / 2.0) - (screen_adjust), (g->window_height / 2.0) + offset, text, color, scalated_size);
+		drawText((g->window_width / 2.0) - (screen_adjust), (g->window_height / 1.5) + offset, text, color, scalated_size);
 	}
 }
 
 void DeadStage::Update(float dt) {
-
+	g->camera = world->getKillerCam();
 }
 
 //END STAGE

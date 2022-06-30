@@ -1,8 +1,5 @@
 #pragma once
 
-#define JUMPSCARE1 0
-#define JUMPSCARE2 1
-
 #include "entitymesh.h"
 #include "ia.h"
 #include "sound.h"
@@ -12,13 +9,8 @@
 class EnemyEntity : public EntityMesh
 {
 public:
-    //IA
-    IA ia;
-    std::vector<Sound*> sounds;
-    bool played_sound;
-    Vector3 target_player;
-    float yaw;
-    Animation* anim = NULL;
+    bool played_sound; Vector3 target_player;
+    float yaw; Animation* anim = NULL;
 
     //constructor
     EnemyEntity(std::string name, Matrix44 model, Mesh* mesh, Texture* texture, Shader* shader, Vector4 color);

@@ -2,22 +2,31 @@
 #include "bass.h"
 #include "utils.h"
 
+#define AMBIENCE 0
+#define FOOTSTEPS 1
+#define EXHALE 2
+#define JUMPSCARE1 3
+#define JUMPSCARE2 4
 
 class Sound
 {
+	static Sound* instance;
+	Sound(); //constructor
+
 public:
 
-	HSAMPLE hSample;
-	HCHANNEL hSampleChannel;
+	std::vector<HSAMPLE*> hSamples;
+	std::vector<std::string> filenames;
 
-	Sound(); //empty constructor
-	Sound(const char* fileName); //constructor
-	Sound(const char* fileName, bool looped); //second constructor
-	Sound(const char* fileName, int offset, int length, int max, bool looped); //third constructor
-	~Sound() {};
+	static Sound* getInstance();
 
-	void LoadSample(const char* fileName, int offset, int length, int max, bool looped);
-	void PlayGameSound();
-	void PauseGameSound();
+	//load methods
+	HSAMPLE* Get(const char* fileName);
+	HSAMPLE* Get(const char* fileName, bool looped);
+	HSAMPLE* Get(const char* fileName, int offset, int length, int max, bool looped);
+
+	HSAMPLE* LoadSample(const char* fileName, int offset, int length, int max, bool looped);
+	void PlayGameSound(int idx);
+
+	void InitSound();
 };
-

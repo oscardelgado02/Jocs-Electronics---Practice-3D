@@ -6,8 +6,6 @@
 PlayerEntity::PlayerEntity(std::string name, Matrix44 model, Mesh* mesh, Texture* texture, Shader* shader, Vector4 color) : EntityMesh(name, model, mesh, texture, shader, color) {
 	cooldown = 3.0f;
 	cooldown_enable = true;
-	footsteps = Sound("data/sounds/footsteps/steps.wav");
-	exhale = Sound("data/sounds/exhale.wav");
 }
 
 PlayerEntity::~PlayerEntity(){}
@@ -104,21 +102,20 @@ float PlayerEntity::runAndCooldown(float dt, float speed) {
 
 void PlayerEntity::playSounds(bool status_footsteps) {
 
+	Sound* sound = Sound::getInstance();
+
 	//cooldown of running
 	if (cooldown < 0.0f) {
 		cooldown_enable = false;
 		//play exhale sound
-		exhale.PlayGameSound();
+		sound->PlayGameSound(EXHALE);
 	}
 	if (cooldown > 2.0f) {
 		cooldown_enable = true;
 	}
 
 	if (status_footsteps) {
-		footsteps.PlayGameSound(); //play
-	}
-	else {
-		footsteps.PauseGameSound(); //pause
+		sound->PlayGameSound(FOOTSTEPS); //play
 	}
 }
 

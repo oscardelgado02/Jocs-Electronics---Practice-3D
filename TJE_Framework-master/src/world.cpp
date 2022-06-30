@@ -119,16 +119,52 @@ bool World::checkIfDead() {
 
 	float size = 1.5f;
 
-	for (int i = 0; i < entities.size(); i++) {
-		if (entities[i]->name.compare("enemy") == 0) {
-			Vector3 enemy = entities[i]->getPosition();
+	std::vector<Entity*> enemies = getEnemyEntities();
+
+	for (int i = 0; i < enemies.size(); i++) {
+		
+		Vector3 enemy = enemies[i]->getPosition();
 			
-			x_status = x_status || ((enemy.x - size < player.x) && (enemy.x + size > player.x));
-			z_status = z_status || ((enemy.z - size < player.z) && (enemy.z + size > player.z));
-		}
+		x_status = x_status || ((enemy.x - size < player.x) && (enemy.x + size > player.x));
+		z_status = z_status || ((enemy.z - size < player.z) && (enemy.z + size > player.z));
 	}
 
 	return x_status && z_status;
+}
+
+Camera* World::getKillerCam() {
+
+	Game* g = Game::instance; //Game instance
+	float dist_factor = (1.0 / 2);
+
+	//we get the player and all the enemies
+	Vector3 player = getPlayerEntity()->getPosition();
+	std::vector<Entity*> enemies = getEnemyEntities();
+
+	//variables to check and save the nearest enemy
+	Vector3 nearest_enemy = Vector3(0.0,0.0,0.0);
+	Vector3 forward = Vector3(0.0,0.0,1.0); //where the enemy is watching
+	float distance = 10000.0f;
+
+	for (int i = 0; i < enemies.size(); i++) {
+
+		Vector3 enemy = enemies[i]->getPosition();
+		forward = enemies[i]->model.rotateVector(Vector3(0.0, 0.0, 1.0)).normalize()*dist_factor;
+
+		if (distance > nearest_enemy.distance(player)) {
+			distance = nearest_enemy.distance(player);
+			nearest_enemy = enemy;
+		}
+	}
+
+	//final sets
+	nearest_enemy.y = 3.3f;
+
+	Camera* cam = new Camera();
+	cam->lookAt(nearest_enemy + forward, nearest_enemy, Vector3(0.f, 1.f, 0.f)); //position the camera and point to 0,0,0
+	cam->setPerspective(70.f, g->window_width / (float)g->window_height, 0.1f, 10000.f); //set the projection, we want to be perspective
+
+	return cam;
 }
 
 bool World::checkIfScape() {

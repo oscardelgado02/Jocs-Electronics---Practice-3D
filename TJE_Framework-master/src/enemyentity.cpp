@@ -2,11 +2,9 @@
 
 EnemyEntity::EnemyEntity(std::string name, Matrix44 model, Mesh* mesh, Texture* texture, Shader* shader, Vector4 color) : EntityMesh(name, model, mesh, texture, shader, color) {
 	played_sound = false;
-	sounds.push_back(new Sound("data/sounds/sustos/mixkit-cinematic-horror-trailer-long-sweep-561.wav"));
-	sounds.push_back(new Sound("data/sounds/sustos/mixkit-horror-impact-773.wav"));
 	target_player = Vector3(0.0f, 0.0f, 0.0f); //initial value
 	yaw = 0.0f;
-	anim = Animation::Get("data/animaciones/bulin47.skanim");
+	anim = Animation::Get("data/animaciones/finalzombi.skanim");
 }
 
 EnemyEntity::~EnemyEntity() {}
@@ -40,7 +38,7 @@ void EnemyEntity::update(float dt) {
 
 	movementAndRotation(dt, speed);
 	playSounds();
-	
+
 }
 
 float EnemyEntity::distanceToPlayer() {
@@ -53,6 +51,8 @@ void EnemyEntity::setTargetPlayer(Vector3 target) {
 
 void EnemyEntity::playSounds() {
 
+	Sound* sound = Sound::getInstance();
+
 	float jumpscare1_dist = 10.0f;
 	float jumpscare2_dist = 5.0f;
 	float step_distance = 20.0f;
@@ -61,11 +61,11 @@ void EnemyEntity::playSounds() {
 	if (this->checkFrustum() && !played_sound) {
 
 		if (distanceToPlayer() < jumpscare2_dist) {
-			sounds[JUMPSCARE2]->PlayGameSound();
+			sound->PlayGameSound(JUMPSCARE2);
 			played_sound = true;
 		}
 		else if (distanceToPlayer() < jumpscare1_dist) {
-			sounds[JUMPSCARE1]->PlayGameSound();
+			sound->PlayGameSound(JUMPSCARE1);
 			played_sound = true;
 		}
 	}
@@ -80,7 +80,7 @@ void EnemyEntity::playSounds() {
 void EnemyEntity::movementAndRotation(float dt, float speed) {
 
 	float max_distance = 20.0f;
-	
+
 	//enemy movement
 	if (!this->checkFrustum() || distanceToPlayer() > max_distance) {
 		played_sound = false;
@@ -146,8 +146,10 @@ void EnemyEntity::multiPass(std::vector<Light*> lights, Camera* camera) {
 	//this will collide with materials with blend...
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
+
 	for (int i = 0; i < lights.size(); ++i)
 	{
+
 		//first pass doesn't use blending
 		if (i == 0)
 			glDisable(GL_BLEND);
@@ -156,9 +158,8 @@ void EnemyEntity::multiPass(std::vector<Light*> lights, Camera* camera) {
 
 		//pass the light data to the shader
 		setUniforms(lights[i], camera);
-
 		//do the draw call
-		mesh->renderAnimated(GL_TRIANGLES, &anim->skeleton);
+		this->mesh->renderAnimated(GL_TRIANGLES, &anim->skeleton);
 	}
 
 	glDisable(GL_BLEND);

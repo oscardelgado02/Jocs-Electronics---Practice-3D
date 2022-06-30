@@ -39,6 +39,7 @@ public:
 	WallEntity* getGoalEntity();
 	void distanceEnemyToPlayer();
 	bool checkIfDead();
+	Camera* getKillerCam();
 	bool checkIfScape();
 	void restartEntity(Vector3 position, Vector3 rotation, Vector3 scale, int idx);
 };

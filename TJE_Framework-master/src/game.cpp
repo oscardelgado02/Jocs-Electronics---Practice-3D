@@ -43,7 +43,7 @@ Map levelMap = Map();
 char* map_path = "data/level/leveldefinitivo.txt";
 
 //Ambience sound
-Sound ambience_sound;
+Sound* sound;
 
 //stages variables
 std::vector<Stage*> stages;
@@ -136,6 +136,10 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	//initGrass();
 	//initSky();
 
+	//init sound
+	sound = Sound::getInstance();
+	sound->InitSound();
+
 	//world->addEnemyEntity("enemy", Matrix44(), Mesh::Get("data/animaciones/bulin47.mesh"), grasstexture, shader, Vector4(1, 1, 1, 1));
 
 	//hide the cursor
@@ -143,8 +147,7 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 
 	//ambience sound
 	//ambience_sound = Sound("data/sounds/ambience/mixkit-creepy-tomb-ambience-2500.wav", true);
-	ambience_sound = Sound("data/sounds/ambience/mixkit-scary-forest-at-night-2486.wav", true);
-	ambience_sound.PlayGameSound();
+	sound->PlayGameSound(AMBIENCE);
 
 	//Stages initialization
 	InitStages(&stages);
