@@ -7,7 +7,8 @@ Stage::Stage() {
 //INTRO STAGE
 
 IntroStage::IntroStage() {
-	camera->lookAt(Vector3(-1.14f, 15.9f, 40.01f), Vector3(-1.13f, 15.6f, 39.01f), Vector3(0.f, 1.f, 0.f)); //position the camera and point to 0,0,0
+	//camera->lookAt(Vector3(-1.14f, 15.9f, 40.01f), Vector3(-1.13f, 15.6f, 39.01f), Vector3(0.f, 1.f, 0.f)); //position the camera and point to 0,0,0
+	camera->lookAt(Vector3(10.75f, 22.9f, -15.07f), Vector3(10.57f, 22.5f, -15.98f), Vector3(0.f, 1.f, 0.f)); //position the camera and point to 0,0,0
 	camera->setPerspective(70.f, g->window_width / (float)g->window_height, 0.1f, 10000.f); //set the projection, we want to be perspective
 	camera->number = (int)STAGE_ID::INTRO;
 }
@@ -46,7 +47,7 @@ STAGE_ID TutorialStage::GetId() { return STAGE_ID::TUTORIAL; }
 
 void TutorialStage::Render() {
 	//text
-	std::string text = "It is the year 1203 and you heard rumours about and old village where strange things happen.";
+	std::string text = "It is the year 1203 and you heard rumours about an abandoned village where strange things happen.";
 	Vector3 color = Vector3(1, 1, 1); //first sentence color
 
 	for (int i = 0; i < 8; i++) {
@@ -126,17 +127,40 @@ void DeadStage::Update(float dt) {
 //END STAGE
 
 EndStage::EndStage() {
-
+	camera->lookAt(Vector3(-29.53f, 19.9f, -96.69f), Vector3(-28.83f, 19.68f, -97.37f), Vector3(0.f, 1.f, 0.f)); //position the camera and point to 0,0,0
+	camera->setPerspective(70.f, g->window_width / (float)g->window_height, 0.1f, 10000.f); //set the projection, we want to be perspective
+	camera->number = (int)STAGE_ID::INTRO;
 }
 
 STAGE_ID EndStage::GetId() { return STAGE_ID::END; }
 
 void EndStage::Render() {
-	drawText(2, 2, "END", Vector3(g->window_width / 2.0, 1.0, g->window_height / 2.0), 2);
+	//render entities
+	world->renderEntities();
+
+	//text
+	std::string text = "Congratulations, you managed to escaped.";
+	Vector3 color = Vector3(1, 1, 1); //first sentence color
+
+	for (int i = 0; i < 8; i++) {
+		if (i == 1) { text = "You try to find someone to help you to fight those \"things\", but nobody believes you..."; color = Vector3(1, 1, 1); }
+		if (i == 2) { text = "Those monsters will still live, if there is any way to say it,"; color = Vector3(1, 1, 1); }
+		if (i == 3) { text = "if no one fight them. That village will be cursed forever..."; color = Vector3(1, 1, 1); }
+		if (i == 4) { text = "And also you..."; color = Vector3(0.6, 0.0, 0.0); }
+		if (i == 5) { text = "Did you really think you escaped from us?"; color = Vector3(0.6, 0.0, 0.0); }
+		if (i == 6) { text = "WE ARE ALWAYS WAITING IN THE SHADOWS"; color = Vector3(0.6, 0.0, 0.0); }
+		if (i == 7) { text = "PRESS SPACE TO... EXIT?"; color = Vector3(1, 1, 1); }
+
+		float size = 1.7;
+		float scalated_size = (g->window_width * size / (1000.0));
+		int screen_adjust = 2.7 * text.size() * scalated_size;
+		int offset = 30 * scalated_size * i;
+		drawText((g->window_width / 2.0) - (screen_adjust), (g->window_height / 6.0) + offset, text, color, scalated_size);
+	}
 }
 
 void EndStage::Update(float dt) {
-
+	g->camera = camera;
 }
 
 //OTHER METHODS
