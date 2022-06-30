@@ -18,6 +18,8 @@ public:
 
 	char type; //camera type
 
+	int number; //to know which camera is it
+
 	//vectors to define the orientation of the camera
 	Vector3 eye; //where is the camera
 	Vector3 center; //where is it pointing

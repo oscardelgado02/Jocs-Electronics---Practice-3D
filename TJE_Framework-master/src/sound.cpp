@@ -84,7 +84,7 @@ void Sound::PlayGameSound(int idx) {
 
 void Sound::InitSound() {
 	hSamples.reserve(5);
-	Get("data/sounds/ambience/mixkit-scary-forest-at-night-2486.wav");
+	Get("data/sounds/ambience/mixkit-scary-forest-at-night-2486.wav", true);
 	Get("data/sounds/footsteps/steps.wav");
 	Get("data/sounds/exhale.wav");
 	Get("data/sounds/sustos/mixkit-cinematic-horror-trailer-long-sweep-561.wav");

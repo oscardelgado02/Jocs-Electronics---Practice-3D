@@ -9,6 +9,7 @@ Stage::Stage() {
 IntroStage::IntroStage() {
 	camera->lookAt(Vector3(-1.14f, 15.9f, 40.01f), Vector3(-1.13f, 15.6f, 39.01f), Vector3(0.f, 1.f, 0.f)); //position the camera and point to 0,0,0
 	camera->setPerspective(70.f, g->window_width / (float)g->window_height, 0.1f, 10000.f); //set the projection, we want to be perspective
+	camera->number = (int)STAGE_ID::INTRO;
 }
 
 STAGE_ID IntroStage::GetId() { return STAGE_ID::INTRO; }
@@ -39,7 +40,7 @@ void IntroStage::Update(float dt) {
 
 //TUTORIAL STAGE
 
-TutorialStage::TutorialStage(){}
+TutorialStage::TutorialStage() {}
 
 STAGE_ID TutorialStage::GetId() { return STAGE_ID::TUTORIAL; }
 
@@ -49,13 +50,13 @@ void TutorialStage::Render() {
 	Vector3 color = Vector3(1, 1, 1); //first sentence color
 
 	for (int i = 0; i < 8; i++) {
-		if (i == 1) { text = "The last villager reported time ago that there were \"things\" that stalked villagers in the shadows..."; color = Vector3(1, 1, 1);}
-		if (i == 2) { text = "And that some people have disappeared..."; color = Vector3(0.6, 0.0, 0.0);}
-		if (i == 3) { text = "You decide to investigate the village, but when you enter, the gate closes behind you."; color = Vector3(1, 1, 1);}
-		if (i == 4) { text = "You need to find another gate to escape from there."; color = Vector3(0.8, 0.6, 0.0);}
-		if (i == 5) { text = "And remember: the villager also said that those things stalked at the distance,"; color = Vector3(0.8, 0.6, 0.0);}
-		if (i == 6) { text = "and that when they were close, they waited until you didn't look at them to chase you."; color = Vector3(0.8, 0.6, 0.0);}
-		if (i == 7) { text = "PRESS SPACE TO CONTINUE"; color = Vector3(1, 1, 1);}
+		if (i == 1) { text = "The last villager reported time ago that there were \"things\" that stalked villagers in the shadows..."; color = Vector3(1, 1, 1); }
+		if (i == 2) { text = "And that some people have disappeared..."; color = Vector3(0.6, 0.0, 0.0); }
+		if (i == 3) { text = "You decide to investigate the village, but when you enter, the gate closes behind you."; color = Vector3(1, 1, 1); }
+		if (i == 4) { text = "You need to find another gate to escape from there."; color = Vector3(0.8, 0.6, 0.0); }
+		if (i == 5) { text = "And remember: the villager also said that those things stalked at the distance,"; color = Vector3(0.8, 0.6, 0.0); }
+		if (i == 6) { text = "and that when they were close, they waited until you didn't look at them to chase you."; color = Vector3(0.8, 0.6, 0.0); }
+		if (i == 7) { text = "PRESS SPACE TO CONTINUE"; color = Vector3(1, 1, 1); }
 
 		float size = 1.7;
 		float scalated_size = (g->window_width * size / (1000.0));
@@ -71,6 +72,7 @@ void TutorialStage::Update(float dt) {}
 
 PlayStage::PlayStage() {
 	camera = world->getPlayerEntityCamera();
+	camera->number = (int)STAGE_ID::PLAY;
 }
 
 STAGE_ID PlayStage::GetId() { return STAGE_ID::PLAY; }
@@ -112,10 +114,13 @@ void DeadStage::Render() {
 }
 
 void DeadStage::Update(float dt) {
-	if (g->camera != world->getKillerCam()) {
+	camera = world->getKillerCam();
+	camera->number = (int)STAGE_ID::DEAD;
+
+	if (g->camera->number != camera->number) {
 		Sound::getInstance()->PlayGameSound(JUMPSCARE2); //se reproduce una sola vez antes de cambiar de cámara
 	}
-	g->camera = world->getKillerCam();
+	g->camera = camera;
 }
 
 //END STAGE
