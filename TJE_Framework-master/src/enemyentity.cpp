@@ -1,52 +1,40 @@
 #include "enemyentity.h"
 
-EnemyEntity::EnemyEntity(std::string name, Matrix44 model, Mesh* mesh, Texture* texture, Shader* shader, Vector4 color) : EntityMesh(name, model, mesh, texture, shader, color) {
+EnemyEntity::EnemyEntity(std::string name, Matrix44 model, Mesh* mesh, Texture* texture, Shader* shader, Vector4 color, Mesh* animated_mesh, Animation* idle_animation) : AnimatedEntity(name, model, mesh, texture, shader, color, animated_mesh, idle_animation) {
 	played_sound = false;
 	target_player = Vector3(0.0f, 0.0f, 0.0f); //initial value
 	yaw = 0.0f;
-	anim = Animation::Get("data/animaciones/ZombieIdle1.skanim");
-	anim_distance = 20.0f;
+
+	addAnimation(Animation::Get("data/animaciones/finalzombi.skanim"));
+	addAnimation(Animation::Get("data/animaciones/ThrillerIdle.skanim"));
 }
 
 EnemyEntity::~EnemyEntity() {}
 
 void EnemyEntity::render() {
-	//get the last camera that was activated
-	Camera* camera = Camera::current;
-	Matrix44 model = this->model;
-	std::vector<Light*> lights = LightManager::getInstance()->getLights();
-
-
-	if (shader && checkFrustum())
-	{
-		//enable shader
-		shader->enable();
-
-		//multipass
-		anim->assignTime(Game::instance->time);
-		multiPass(lights, camera);
-		anim->skeleton.renderSkeleton(camera, model);
-
-		//disable shader
-		shader->disable();
-	}
+	AnimatedEntity::render();
 }
 
 void EnemyEntity::update(float dt) {
 	float speed = 2.0f;
 
 	//Vector3 nextStep = ia.sendStep(model.getTranslation());
-
-	if (!this->checkFrustum() || distanceToPlayer() > anim_distance) {
-		anim = Animation::Get("data/animaciones/ZombieIdle1.skanim");
-	}
-	else {
-		anim = Animation::Get("data/animaciones/finalzombi.skanim");
-	}
+	changeEnemyAnimation();
 
 	movementAndRotation(dt, speed);
 	playSounds();
 
+}
+
+void EnemyEntity::changeEnemyAnimation() {
+	float anim_distance = 20.0f;
+
+	if (distanceToPlayer() < anim_distance) {
+		changeAnimation(ANIM_IDLE);
+	}
+	else {
+		changeAnimation(ANIM_WALK);
+	}
 }
 
 float EnemyEntity::distanceToPlayer() {
@@ -145,32 +133,3 @@ void EnemyEntity::movementAndRotation(float dt, float speed) {
 	}
 }
 */
-
-void EnemyEntity::multiPass(std::vector<Light*> lights, Camera* camera) {
-	//allow to render pixels that have the same depth as the one in the depth buffer
-	glDepthFunc(GL_LEQUAL);
-
-	//set blending mode to additive
-	//this will collide with materials with blend...
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-
-
-	for (int i = 0; i < lights.size(); ++i)
-	{
-
-		//first pass doesn't use blending
-		if (i == 0)
-			glDisable(GL_BLEND);
-		else
-			glEnable(GL_BLEND);
-
-		//pass the light data to the shader
-		setUniforms(lights[i], camera);
-		//do the draw call
-		this->mesh->renderAnimated(GL_TRIANGLES, &anim->skeleton);
-	}
-
-	glDisable(GL_BLEND);
-	glDepthFunc(GL_LESS); //as default
-
-}

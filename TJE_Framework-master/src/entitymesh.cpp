@@ -41,7 +41,7 @@ void EntityMesh::update(float dt) {
 
 bool EntityMesh::checkFrustum() {
 	//Frustum variables
-	float loadDistance = 200.0f;
+	//float loadDistance = 200.0f;
 	float no_render_dist = 1000.0f;
 
 	//current camera
@@ -51,11 +51,11 @@ bool EntityMesh::checkFrustum() {
 	if (dist > no_render_dist) {
 		return false;
 	}
-
+	/*
 	if (dist < loadDistance) {
 		//set la calidad a mas pocha de los modelos
 	}
-
+	*/
 	BoundingBox worldAABB = transformBoundingBox(model, mesh->box);
 	if (!cam->testBoxInFrustum(worldAABB.center, worldAABB.halfsize)) {
 		return false;

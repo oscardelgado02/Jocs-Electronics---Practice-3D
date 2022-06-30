@@ -58,11 +58,11 @@ void PlayerEntity::update(float dt) {
 	//update lantern position
 	LightManager::getInstance()->updatePlayerLight(this->model.getTranslation() + Vector3(0.0,0.9,0.0));
 	
-	
+	/*
 	printf("Cam: %f,%f,%f\n", cam->eye.x, cam->eye.y, cam->eye.z);
 	printf("Cam center: %f,%f,%f\n", cam->center.x, cam->center.y, cam->center.z);
 	printf("Model: %f,%f,%f\n\n", this->model.getTranslation().x, this->model.getTranslation().y, this->model.getTranslation().z);
-	
+	*/
 }
 
 void PlayerEntity::movePlayer(Vector3 nextPos) {

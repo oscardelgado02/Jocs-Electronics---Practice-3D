@@ -115,8 +115,16 @@ void DeadStage::Render() {
 }
 
 void DeadStage::Update(float dt) {
+	//get killer cam
 	camera = world->getKillerCam();
 	camera->number = (int)STAGE_ID::DEAD;
+
+	//get enemies and change animation
+	std::vector<Entity*> enemies = world->getEnemyEntities();
+
+	for (int i = 0; i < enemies.size(); i++) {
+		((EnemyEntity*)enemies[i])->changeAnimation(ANIM_JUMPSCARE);
+	}
 
 	if (g->camera->number != camera->number) {
 		Sound::getInstance()->PlayGameSound(JUMPSCARE2); //se reproduce una sola vez antes de cambiar de cámara

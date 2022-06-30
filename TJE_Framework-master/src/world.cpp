@@ -32,8 +32,8 @@ void World::addPlayerEntity(std::string name, Matrix44 model, Mesh* mesh, Textur
 	entities.push_back(new PlayerEntity(name, model, mesh, texture, shader, color));
 }
 
-void World::addEnemyEntity(std::string name, Matrix44 model, Mesh* mesh, Texture* texture, Shader* shader, Vector4 color) {
-	entities.push_back(new EnemyEntity(name, model, mesh, texture, shader, color));
+void World::addEnemyEntity(std::string name, Matrix44 model, Mesh* mesh, Texture* texture, Shader* shader, Vector4 color, Mesh* animated_mesh, Animation* idle_animation) {
+	entities.push_back(new EnemyEntity(name, model, mesh, texture, shader, color, animated_mesh, idle_animation));
 }
 
 void World::addWallEntity(std::string name, Matrix44 model, Mesh* mesh, Texture* texture, Shader* shader, Vector4 color) {
@@ -135,7 +135,7 @@ bool World::checkIfDead() {
 Camera* World::getKillerCam() {
 
 	Game* g = Game::instance; //Game instance
-	float dist_factor = (1.0 / 2);
+	float dist_factor = 0.8;
 
 	//we get the player and all the enemies
 	Vector3 player = getPlayerEntity()->getPosition();

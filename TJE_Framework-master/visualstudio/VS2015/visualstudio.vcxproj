@@ -126,6 +126,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\animatedentity.cpp" />
     <ClCompile Include="..\..\src\animation.cpp" />
     <ClCompile Include="..\..\src\camera.cpp" />
     <ClCompile Include="..\..\src\enemyentity.cpp" />
@@ -164,6 +165,7 @@
     <ClCompile Include="..\..\src\world.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\animatedentity.h" />
     <ClInclude Include="..\..\src\animation.h" />
     <ClInclude Include="..\..\src\camera.h" />
     <ClInclude Include="..\..\src\enemyentity.h" />
