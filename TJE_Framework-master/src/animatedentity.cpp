@@ -20,7 +20,6 @@ void AnimatedEntity::render() {
 		//multipass
 		current_animation->assignTime(Game::instance->time);
 		multiPass(lights, camera);
-		current_animation->skeleton.renderSkeleton(camera, model);
 
 		//disable shader
 		shader->disable();

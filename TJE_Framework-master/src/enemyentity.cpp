@@ -101,35 +101,3 @@ void EnemyEntity::movementAndRotation(float dt, float speed) {
 		model.translateGlobal(nextPos.x, 0.0f, nextPos.z);
 	}
 }
-
-/*
-//para que baile danza kuduro el personaje
-void EnemyEntity::movementAndRotation(float dt, float speed) {
-
-	float max_distance = 20.0f;
-
-	//enemy movement
-	if (this->checkFrustum() || distanceToPlayer() > max_distance) {
-		played_sound = false;
-
-		//enemy direction to player
-		Vector3 side = model.rotateVector(Vector3(1.0, 0.0, 0.0)).normalize();
-		Vector3 forward = model.rotateVector(Vector3(0.0, 0.0, -1.0)).normalize();
-
-		Vector3 direction = target_player - model.getTranslation();
-
-		//model.lookAt(model.getTranslation(), direction, Vector3(0.0,1.0,0.0));
-
-		float sideDot = side.dot(direction);
-		float forwardDot = forward.dot(direction);
-
-		if (forwardDot < 0.90f) yaw += sign(sideDot) * dt;
-
-		model.rotate(yaw, Vector3(0.0, -1.0, 0.0));
-
-		Vector3 nextPos = forward * speed * dt;
-
-		//model.translate(nextPos.x, 0.0f, nextPos.z);
-	}
-}
-*/

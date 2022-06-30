@@ -185,12 +185,6 @@ void Game::render(void)
 
 void Game::update(double seconds_elapsed)
 {
-
-	if (Input::isKeyPressed(SDL_SCANCODE_P)) {
-		camera->eye = Vector3(camera->eye.x, camera->eye.y + 3.0f, camera->eye.z);
-		camera->center = Vector3(camera->center.x, camera->center.y + 3.0f, camera->center.z);
-	}
-
 	if (Input::wasKeyPressed(SDL_SCANCODE_SPACE)) {
 		if ((int)currentStage < (int)STAGE_ID::PLAY) { //used to skip intro and tutorial stage
 			int nextStageIndex = (((int)currentStage) + 1);
