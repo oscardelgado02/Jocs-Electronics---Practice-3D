@@ -17,6 +17,8 @@
 #define ENEMY 1
 #define WALL 2
 #define GOAL 3
+#define BRIDGE 4
+#define INVISIBLE_WALL 5
 
 class Map
 {

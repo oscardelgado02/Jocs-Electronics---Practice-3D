@@ -138,12 +138,18 @@ Vector3 PlayerEntity::detectPlayerCollision(float dt, Vector3 playerVel) {
 		Vector3 coll;
 		Vector3 collnorm;
 
+		float radius = 0.4f;
+
 		if (currentEntity->name.compare("player") == 0) {
 			continue;
 		}
 
+		if (currentEntity->name.compare("bridge") == 0) {
+			radius = 0.2f;
+		}
+
 		//comprobamos si colisiona el objeto con la esfera (radio 3)
-		if (!entityMesh->mesh->testSphereCollision(entityMesh->model, character_center, 0.2f, coll, collnorm))
+		if (!entityMesh->mesh->testSphereCollision(entityMesh->model, character_center, radius, coll, collnorm))
 			continue; //si no colisiona, pasamos al siguiente objeto
 
 		//si la esfera está colisionando muevela a su posicion anterior alejandola del objeto

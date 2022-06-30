@@ -43,8 +43,8 @@ void World::addWallEntity(std::string name, Matrix44 model, Mesh* mesh, Texture*
 void World::renderEntities() {
 	
 	for (int i = 0; i < entities.size(); i++) {
-		//if(entities[i]->getName().compare("wall")!=0)
-		entities[i]->render();
+		if(entities[i]->getName().compare("invisible_wall")!=0) entities[i]->render();
+		//entities[i]->render();
 	}
 }
 
