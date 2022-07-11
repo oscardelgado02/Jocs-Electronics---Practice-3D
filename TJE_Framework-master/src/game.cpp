@@ -16,8 +16,6 @@
 #include <cmath>
 
 //some globals
-Mesh* mesh = NULL;
-Texture* texture = NULL;
 Shader* shader = NULL;
 float angle = 0;
 float mouse_speed = 20.0f;
@@ -25,15 +23,7 @@ FBO* fbo = NULL;
 
 Game* Game::instance = NULL;
 
-Mesh* grassmesh = NULL;
-Texture* grasstexture = NULL;
-const int grass_width1 = 40;
-const int grass_height1 = 15;
-const int grass_height2 = 24;
-const int grass_height3 = 30;
 float padding = 2.5f;
-
-Mesh* brujimesh = NULL;
 
 //World instance
 World* world;
@@ -48,46 +38,6 @@ Sound* sound;
 //stages variables
 std::vector<Stage*> stages;
 STAGE_ID currentStage = STAGE_ID::INTRO;
-
-void initGrass() { //para poner un suelo de césped
-	for (size_t i = 0; i < grass_width1; i++) {
-		for (size_t j = 0; j < grass_height1; j++) {
-			Matrix44 model;
-			model.translate((i * padding) - grass_width1, 0.0f, (j * padding) - grass_height1);
-
-			world->addEntityMesh("grass", model, grassmesh, grasstexture, shader, Vector4(1, 1, 1, 1));
-		}
-
-		for (size_t j = 0; j <  grass_height2; j++) {
-			Matrix44 model;
-			model.translate((i * padding) - grass_width1, 0.0f, (j * padding) - 66 - grass_height2);
-
-			world->addEntityMesh("grass", model, grassmesh, grasstexture, shader, Vector4(1, 1, 1, 1));
-		}
-
-		for (size_t j = 0; j < grass_height3; j++) {
-			Matrix44 model;
-			model.translate((i * padding) - grass_width1, 0.0f, (j * padding) - 180 - grass_height3);
-
-			world->addEntityMesh("grass", model, grassmesh, grasstexture, shader, Vector4(1, 1, 1, 1));
-		}
-	}
-
-	//Matrix44 model;
-	//world->addEntityMesh("grass", model, grassmesh, grasstexture, Shader::Get("data/shaders/basic.vs", "data/shaders/dark.fs"), Vector4(1, 1, 1, 1));
-}
-
-void initSky() { //para poner un cielo
-	Matrix44 model;
-	Mesh* sky_mesh = NULL;
-	Texture* sky_texture = NULL;
-	sky_texture = new Texture();
-	sky_texture->load("data/sky/stars.tga");
-	sky_mesh = Mesh::Get("data/sky/box.ase");
-	model.scale(1.0f, 1.0f, 5.0f);
-
-	world->addEntityMesh("sky", model, sky_mesh, sky_texture, shader, Vector4(1, 1, 1, 1));
-}
 
 Game::Game(int window_width, int window_height, SDL_Window* window)
 {
@@ -117,13 +67,6 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	//create our camera
 	camera = new Camera();
 
-	//grass mesh and texture init
-	grasstexture = new Texture();
-	grasstexture->load("data/texture_samurai.tga");
-	grassmesh = Mesh::Get("data/SM_Env_Tile_Grass_01_25.obj");
-	//grassmesh = new Mesh();
-	//grassmesh->createPlane(100);
-
 	// example of shader loading using the shaders manager
 	shader = Shader::Get("data/shaders/basic.vs", "data/shaders/dark.fs");
 
@@ -131,22 +74,16 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	world = World::getInstance();
 
 	//init map
-	//map.loadMap("data/level/level1.txt");
 	levelMap.loadMap(map_path);
-	//initGrass();
-	//initSky();
 
 	//init sound
 	sound = Sound::getInstance();
 	sound->InitSound();
 
-	//world->addEnemyEntity("enemy", Matrix44(), Mesh::Get("data/animaciones/bulin47.mesh"), grasstexture, shader, Vector4(1, 1, 1, 1));
-
 	//hide the cursor
 	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
 
 	//ambience sound
-	//ambience_sound = Sound("data/sounds/ambience/mixkit-creepy-tomb-ambience-2500.wav", true);
 	sound->PlayGameSound(AMBIENCE);
 
 	//Stages initialization

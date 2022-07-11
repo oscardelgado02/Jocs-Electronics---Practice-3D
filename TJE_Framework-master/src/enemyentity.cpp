@@ -16,7 +16,7 @@ void EnemyEntity::render() {
 }
 
 void EnemyEntity::update(float dt) {
-	float speed = 2.0f;
+	float speed = 1.8f;
 
 	//Vector3 nextStep = ia.sendStep(model.getTranslation());
 	changeEnemyAnimation();

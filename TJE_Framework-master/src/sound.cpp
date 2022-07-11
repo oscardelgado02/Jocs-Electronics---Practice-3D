@@ -87,6 +87,6 @@ void Sound::InitSound() {
 	Get("data/sounds/ambience/mixkit-scary-forest-at-night-2486.wav", true);
 	Get("data/sounds/footsteps/steps.wav");
 	Get("data/sounds/exhale.wav");
-	Get("data/sounds/sustos/mixkit-cinematic-horror-trailer-long-sweep-561.wav");
-	Get("data/sounds/sustos/mixkit-horror-impact-773.wav");
+	Get("data/sounds/sustos/mixkit-cinematic-horror-trailer-long-sweep-561.wav", 0, 0, 3, false);
+	Get("data/sounds/sustos/mixkit-horror-impact-773.wav", 0, 0, 3, false);
 }
