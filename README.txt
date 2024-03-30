@@ -4,7 +4,7 @@ Proyecto hecho por:
 
 - Víctor Alcaide Rodríguez   victor.alcaide02@estudiant.upf.edu
 
-Vídeo: https://www.youtube.com/watch?v=XAfQ3jLxYSo
+Vídeo: youtu.be/XAfQ3jLxYSo
 
 De momento en nuestro juego tenemos implementado una función muy importante, la cual nos lee un archivo txt
 con la información de todas las entidades y las carga en el mapa. Diferenciamos entre tres tipos de entidades
