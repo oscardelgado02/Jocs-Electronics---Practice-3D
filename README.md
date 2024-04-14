@@ -10,5 +10,5 @@ Stalkers is a 3D game DEMO made entirely with C++ where you need to find the exi
 
 - Víctor Alcaide Rodríguez: https://www.linkedin.com/in/víctor-alcaide-rodríguez-272895253/
 
-### Video of the game
+## Video of the game:
  https://youtu.be/XAfQ3jLxYSo
